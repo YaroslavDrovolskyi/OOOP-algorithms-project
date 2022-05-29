@@ -15,6 +15,7 @@
 #include "factory.h"
 #include <set>
 #include <random>
+#include <QCloseEvent>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -309,3 +310,18 @@ QString MainWindow::getRandomInputLine(std::size_t algo_index){
         return getRandomMatchingSustringInputLine();
     }
 }
+
+void MainWindow::closeEvent (QCloseEvent *event)
+{
+        event->ignore();
+        on_exitbtn_clicked();
+
+}
+
+void MainWindow::on_exitbtn_clicked()
+{
+    QWidget* par = qobject_cast<QWidget*>(this->parent());
+    par->show();
+    this->close();
+}
+

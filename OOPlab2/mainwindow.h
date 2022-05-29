@@ -14,6 +14,7 @@
 #include "algoslib.h"
 #include <memory>
 #include <functional>
+#include <QCloseEvent>
 
 #include"memento.h"
 
@@ -44,7 +45,12 @@ private slots:
 
     void on_genRandInputBtn_clicked();
 
+    void on_exitbtn_clicked();
+
 private:
+
+    void closeEvent (QCloseEvent *event) override;
+
     Ui::MainWindow *ui;
 
     const QVector<QString> NamesOfAlgos = {

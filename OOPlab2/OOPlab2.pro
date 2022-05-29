@@ -12,21 +12,27 @@ SOURCES += \
     facadeinfo.cpp \
     factory.cpp \
     main.cpp \
+    mainmenu.cpp \
     mainwindow.cpp \
     facade.cpp \
     memento.cpp \
+    simplexwindow.cpp \
     visitor.cpp
 
 HEADERS += \
     facadeinfo.h \
     factory.h \
+    mainmenu.h \
     mainwindow.h \
         facade.h \
     memento.h \
+    simplexwindow.h \
     visitor.h
 
 FORMS += \
-    mainwindow.ui
+    mainmenu.ui \
+    mainwindow.ui \
+    simplexwindow.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
