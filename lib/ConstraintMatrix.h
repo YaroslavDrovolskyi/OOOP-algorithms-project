@@ -13,6 +13,7 @@ private:
 
 public:
 	ConstraintMatrix(std::size_t rows, std::size_t cols);
+	ConstraintMatrix(const std::vector<std::vector<double>>& m);
 	void appendRow(const std::vector<T>& new_row);
 	void appendCol(const std::vector<T>& new_col);
 	std::size_t nRows() const;

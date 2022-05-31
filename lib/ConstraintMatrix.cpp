@@ -12,6 +12,29 @@ ConstraintMatrix<T>::ConstraintMatrix(std::size_t rows, std::size_t cols) :
 
 }
 
+
+template<typename T>
+ConstraintMatrix<T>::ConstraintMatrix(const std::vector<std::vector<double>>& m){
+	this->rows = m.size();
+	if (rows == 0) {
+		throw std::invalid_argument("matrix can't have 0 rows");
+	}
+
+	this->cols = m[0].size();
+	if (cols == 0) {
+		throw std::invalid_argument("matrix can't have 0 cols");
+	}
+
+	for (const auto& row : m) {
+		if (row.size() != this->cols) {
+			throw std::invalid_argument("matrix can't have different-sized cols");
+		}
+	}
+
+	this->matrix = m;
+
+}
+
 template<typename T>
 void ConstraintMatrix<T>::appendRow(const std::vector<T>& new_row) {
 	if (this->cols != 0) {

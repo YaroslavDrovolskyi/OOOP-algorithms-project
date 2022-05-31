@@ -4,6 +4,13 @@
 
 
 
+SimplexMethod::SimplexMethod(const std::vector<double>& coefs, const ConstraintMatrix<double>& matrix, const std::vector<double>& beta) :
+	coefs(coefs), matrix(matrix), beta(beta)
+
+{
+
+}
+
 void SimplexMethod::run() {
 	findBasis();
 	if (getMax(basis_vars) == std::numeric_limits<double>::infinity()) { // no exact basis
@@ -17,11 +24,11 @@ void SimplexMethod::run() {
 	while (true) {
 		calcDelta();
 		if (getMin(delta) >= 0) { // we found optimal solution
-//			makeResult(); // 
+			makeResult(true); /// 
 			return;
 		}
 		if (isNoSolutions()) {
-			// resull make result
+			makeResult(false); /// 
 			return;
 		}
 		std::size_t min_j = getMinIndex(delta);
@@ -29,6 +36,7 @@ void SimplexMethod::run() {
 		std::size_t min_i = getMinIndex(theta);
 
 		// captureState(); // 
+		this->steps.push_back(SimplexMethodTable(matrix, beta, basis_vars, delta, theta, min_i, min_j));  // add step
 		basis_vars[min_i] = min_j; // change basis
 		matrix.makeJordanGaussElimination(min_i, min_j, &beta);
 
@@ -37,6 +45,10 @@ void SimplexMethod::run() {
 
 
 void SimplexMethod::calcDelta() {
+	if (delta.size() == 0) {
+		delta.resize(matrix.nCols());
+	}
+	
 	for (std::size_t j = 0; j < matrix.nCols(); j++) {
 		double scalar_product = 0;
 		for (std::size_t i = 0; i < matrix.nRows(); i++) {
@@ -48,6 +60,9 @@ void SimplexMethod::calcDelta() {
 
 
 void SimplexMethod::calcTheta(std::size_t col_index) {
+	if (theta.size() == 0) {
+		theta.resize(matrix.nRows());
+	}
 	for (std::size_t i = 0; i < matrix.nRows(); i++) {
 		if (matrix.item(i, col_index) > 0) {
 			theta[i] = beta[i] / matrix.item(i, col_index);
@@ -115,4 +130,58 @@ bool SimplexMethod::isNoSolutions() {
 	}
 
 	return false;
+}
+
+
+void SimplexMethod::makeResult(bool is_solution_exist) {
+	SimplexMethodTable last_step(matrix, beta, basis_vars, delta);
+	this->steps.push_back(last_step);
+
+	this->solution.setCoefs(coefs);
+	solution.setSteps(steps);
+
+
+	this->solution.setIsSolution(is_solution_exist);
+	if (is_solution_exist) {
+		std::vector<double> s = makeSolution();
+		solution.setSolution(s);
+		solution.setFuncValue(scalarProduct(s, coefs));
+	}
+	else {
+		solution.setResultStr("No solutions, target function -> -inf");
+	}
+
+	
+}
+
+
+
+std::vector<double> SimplexMethod::makeSolution() {
+	std::vector<double> result(this->coefs.size(), 0);
+
+	for (std::size_t i = 0; i < basis_vars.size(); i++) { // basis_vars[i] is index of i-th basis variable
+		result[basis_vars[i]] = beta[i];
+	}
+
+	return result;
+}
+
+
+
+double SimplexMethod::scalarProduct(const std::vector<double>& v1, const std::vector<double>& v2) {
+	if (v1.size() != v2.size()) {
+		throw std::invalid_argument("Size of both vectors must be equal");
+	}
+
+	double result = 0;
+	for (std::size_t i = 0; i < v1.size(); i++) {
+		result += v1[i] * v2[i];
+	}
+
+	return result;
+}
+
+
+SimplexMethodSolution SimplexMethod::getSolution() const {
+	return this->solution;
 }
