@@ -17,7 +17,7 @@ void SimplexMethod::run() {
 		throw std::runtime_error("Input constraint matrix doesn't contain identity submatrix");
 		// there we can apply M-method or something else to find start basis
 	}
-	if (getMin(basis_vars) < 0) { // some beta[i] < 0, so it is not canonical task
+    if (getMin(beta) < 0) { // some beta[i] < 0, so it is not canonical task
 		throw std::runtime_error("Task is not canonical: exist beta[i] < 0");
 		// there we can apply dual simplex-method
 	}

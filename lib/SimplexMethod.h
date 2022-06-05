@@ -2,9 +2,10 @@
 #include <vector>
 #include "ConstraintMatrix.h"
 #include "SimplexMethodTable.h"
+#include "algoslib_global.h"
 
 
-class SimplexMethod {
+class ALGOSLIB_EXPORT SimplexMethod {
 private:
 	ConstraintMatrix<double> matrix;
 	std::vector<double> beta;

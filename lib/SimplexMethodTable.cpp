@@ -1,4 +1,5 @@
 #include "SimplexMethodTable.h"
+#include <utility>
 
 
 
@@ -17,6 +18,30 @@ SimplexMethodTable::SimplexMethodTable(const ConstraintMatrix<double>& matrix, c
 {
 
 
+}
+
+
+ConstraintMatrix<double> SimplexMethodTable::getConstraintMatrix() const{
+    return this->matrix;
+}
+std::vector<double> SimplexMethodTable::getBeta() const{
+    return this->beta;
+}
+std::vector<double> SimplexMethodTable::getBasisVars() const{
+    return this->basis_vars;
+}
+std::vector<double> SimplexMethodTable::getDelta() const{
+    return this->delta;
+}
+
+bool SimplexMethodTable::isLastStep() const{
+    return this->is_last_step;
+}
+std::vector<double> SimplexMethodTable::getTheta() const{
+    return this->theta;
+}
+std::pair<std::size_t, std::size_t> SimplexMethodTable::getLeadItem() const{
+    return std::make_pair(lead_i, lead_j);
 }
 
 
@@ -57,4 +82,25 @@ void SimplexMethodSolution::setResultStr(const std::string& result_str) {
 }
 void SimplexMethodSolution::setIsSolution(bool is_solution) {
 	this->is_solution = is_solution;
+}
+
+
+std::vector<double> SimplexMethodSolution::getCoefs() const{
+    return this->coefs;
+}
+std::vector<SimplexMethodTable> SimplexMethodSolution::getSteps() const{
+    return this->steps;
+}
+std::string SimplexMethodSolution::getResultStr() const{
+    return this->result_str;
+}
+
+bool SimplexMethodSolution::isSolutionExist() const{
+    return this->is_solution;
+}
+std::vector<double> SimplexMethodSolution::getSolution() const{
+    return this->solution;
+}
+double SimplexMethodSolution::getFuncValue() const{
+    return this->func_value;
 }

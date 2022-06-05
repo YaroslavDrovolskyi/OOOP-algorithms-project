@@ -1,7 +1,10 @@
 #pragma once
 #include "ConstraintMatrix.h"
 #include <string>
-class SimplexMethodTable {
+#include "algoslib_global.h"
+
+
+class ALGOSLIB_EXPORT SimplexMethodTable {
 	ConstraintMatrix<double> matrix;
 	std::vector<double> beta;
 	std::vector<double> basis_vars; // indexes of basis vars
@@ -22,12 +25,21 @@ public:
 		const std::vector<double>& basis_vars, const std::vector<double>& delta);
 
 
-	// need to add getters
+    ConstraintMatrix<double> getConstraintMatrix() const;
+    std::vector<double> getBeta() const;
+    std::vector<double> getBasisVars() const;
+    std::vector<double> getDelta() const;
+
+    bool isLastStep() const;
+    std::vector<double> getTheta() const;
+    std::pair<std::size_t, std::size_t> getLeadItem() const;
+
+
 
 };
 
 
-class SimplexMethodSolution {
+class ALGOSLIB_EXPORT SimplexMethodSolution {
 	std::vector<double> coefs;
 	std::vector<SimplexMethodTable> steps;
 	std::vector<double> solution; // solution[i] - is value of i-th variable
@@ -50,6 +62,18 @@ public:
 	void setFuncValue(double func_value);
 	void setResultStr(const std::string& result_str);
 	void setIsSolution(bool is_solution);
+
+
+    std::vector<double> getCoefs() const;
+    std::vector<SimplexMethodTable> getSteps() const;
+    std::string getResultStr() const;
+
+    bool isSolutionExist() const;
+    std::vector<double> getSolution() const;
+    double getFuncValue() const;
+
+
+
 
 };
 

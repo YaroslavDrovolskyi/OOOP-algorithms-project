@@ -1,10 +1,11 @@
 #pragma once
 
 #include <vector>
+#include "algoslib_global.h"
 
 
 template<typename T>
-class ConstraintMatrix {
+class ALGOSLIB_EXPORT ConstraintMatrix {
 private:
 	std::vector<std::vector<T>> matrix;
 	std::size_t rows;
