@@ -3,6 +3,9 @@
 
 #include <QDialog>
 #include <QCloseEvent>
+#include <QTableWidget>
+
+#include "SimplexMethodTable.h"
 
 namespace Ui {
 class SimplexWindow;
@@ -21,6 +24,7 @@ private slots:
 
 private:
      void closeEvent (QCloseEvent *event) override;
+
 
     Ui::SimplexWindow *ui;
 };

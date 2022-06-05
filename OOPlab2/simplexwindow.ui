@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>586</width>
-    <height>388</height>
+    <width>1008</width>
+    <height>593</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -35,27 +35,24 @@
       </size>
      </property>
      <property name="title">
-      <string>GroupBox</string>
+      <string/>
      </property>
-     <layout class="QVBoxLayout" name="verticalLayout">
+     <layout class="QVBoxLayout" name="verticalLayout" stretch="0,2,0,0,0,0,0">
+      <property name="sizeConstraint">
+       <enum>QLayout::SetNoConstraint</enum>
+      </property>
       <item>
-       <widget class="QTableWidget" name="resultTable">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
+       <widget class="QLabel" name="label">
+        <property name="text">
+         <string>Target function</string>
         </property>
-        <attribute name="horizontalHeaderCascadingSectionResizes">
-         <bool>true</bool>
-        </attribute>
-        <attribute name="verticalHeaderCascadingSectionResizes">
-         <bool>false</bool>
-        </attribute>
        </widget>
       </item>
       <item>
        <widget class="QLineEdit" name="inputline"/>
+      </item>
+      <item>
+       <widget class="QTextEdit" name="textEdit"/>
       </item>
       <item>
        <widget class="QScrollArea" name="scrollArea">
@@ -68,7 +65,7 @@
         <property name="maximumSize">
          <size>
           <width>167772</width>
-          <height>150</height>
+          <height>150000</height>
          </size>
         </property>
         <property name="styleSheet">
@@ -82,17 +79,16 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>546</width>
-           <height>98</height>
+           <width>960</width>
+           <height>192</height>
           </rect>
          </property>
-         <layout class="QGridLayout" name="gridLayout_2">
-          <item row="0" column="1">
-           <widget class="QComboBox" name="algoselector"/>
-          </item>
-         </layout>
+         <layout class="QGridLayout" name="gridLayout_2"/>
         </widget>
        </widget>
+      </item>
+      <item>
+       <widget class="QComboBox" name="algoselector"/>
       </item>
       <item>
        <widget class="QPushButton" name="btnrun">
