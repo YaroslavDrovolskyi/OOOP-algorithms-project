@@ -85,6 +85,10 @@ SimplexWindow::SimplexWindow(QWidget *parent) :
     this->vars_number = 1;
     displayFunctionInput();
     displayConstraintsInput();
+
+
+    ui->lineEdit->setText(QString::number(vars_number));
+    ui->lineEdit_2->setText(QString::number(constraints_number));
 }
 
 SimplexWindow::~SimplexWindow()
@@ -107,57 +111,37 @@ void SimplexWindow::on_exitbtn_clicked()
 }
 
 
-
-void SimplexWindow::displayInputRow(QBoxLayout* input_layout, QVector<QLineEdit*>& function_input, QWidget* new_last_item){
-    QLayoutItem* detached_last_item = input_layout->takeAt(function_input.size()); // detach last item
+/**
+ * @brief SimplexWindow::displayInputRow
+ * @param row_layout is layout of row we need to display
+ * @param coefs_inputlines_storage is vector of pointers on coefs inputlines in this row
+ * @param new_last_item is last (terminate) item. For example if row is constraint row, then it will be {" = "} {beta inputline}
+ */
+void SimplexWindow::displayInputRow(QBoxLayout* row_layout, QVector<QLineEdit*>& coefs_inputlines_storage, QWidget* new_last_item){
+    // remove terminated item for correct inserting
+    QLayoutItem* detached_last_item = row_layout->takeAt(coefs_inputlines_storage.size());
     if (detached_last_item){
         delete detached_last_item;
-        delete detached_last_item->widget();//////////////////////////////////////////////////////////////////////////
+        delete detached_last_item->widget();
     }
 
 
-    while (function_input.size() < vars_number){
-        // create new item
-        QBoxLayout* new_coef_input = new QBoxLayout(QBoxLayout::Direction::LeftToRight);
-        new_coef_input->setSizeConstraint(QLayout::SetFixedSize); /////////////////////////////////////////
-
-        if (function_input.size() > 0){ // if we add first inputline in row
-            new_coef_input->addWidget(new QLabel(" + "));
-        }
-
-        QLineEdit* coef_input_line = new QLineEdit();
-        new_coef_input->addWidget(coef_input_line);
-
-        QLabel* new_var_name_label = new QLabel(getVarName(function_input.size() + 1));
-        new_coef_input->addWidget(new_var_name_label);
-
-        QWidget* w = new QWidget(); // ////////////////////////////////////////////////////////////////////////////////////
-        w->setLayout(new_coef_input);
-
-//        input_layout->insertWidget(function_input.size(), w);
-        input_layout->addWidget(w); // //////////////////////////////////////////////////////
-
-
-        function_input.push_back(coef_input_line);
+    // if number of variables increased
+    while (coefs_inputlines_storage.size() < vars_number){
+        row_layout->addWidget(createCoefInput(coefs_inputlines_storage));
     }
 
-
-    while(function_input.size() > vars_number){
-
-        QLayoutItem* cur_coef_input = input_layout->itemAt(function_input.size() - 1);
-        input_layout->removeItem(cur_coef_input);
+    // if number of variables decreased
+    while(coefs_inputlines_storage.size() > vars_number){
+        QLayoutItem* cur_coef_input = row_layout->takeAt(coefs_inputlines_storage.size() - 1);
         delete cur_coef_input;
 
-        function_input.pop_back();
+        coefs_inputlines_storage.pop_back();
     }
 
-
-    if (new_last_item){ // return last item on its place
-//        input_layout->insertItem(input_layout->count(), detached_last_item);
-//        QLayoutItem* t = new QLayoutItem();
-
-        input_layout->addWidget(new_last_item);
-
+    // put new terminated item at the and
+    if (new_last_item){
+        row_layout->addWidget(new_last_item);
     }
 
 }
@@ -175,7 +159,7 @@ void SimplexWindow::displayConstraintsInput(){
 
     // if number of rows changed
     while(constraints_input.size() < constraints_number){
-        QBoxLayout* new_row = newConstraintsRowInput();
+        QBoxLayout* new_row = createConstraintsRowInput();
         input_layout->addLayout(new_row);
         constraints_input_rows.push_back(new_row);
     }
@@ -193,9 +177,11 @@ void SimplexWindow::displayConstraintsInput(){
 
     // correct size of constraints rows
     for (std::size_t i = 0; i < constraints_number; i++){
+
         QBoxLayout* row = constraints_input_rows[i];
         QVector<QLineEdit*>& coefs = constraints_input[i];
 
+        // create new beta inputline
         QBoxLayout* new_beta_input = new QBoxLayout(QBoxLayout::Direction::LeftToRight);
         new_beta_input->setSizeConstraint(QLayout::SetFixedSize);
 
@@ -204,40 +190,20 @@ void SimplexWindow::displayConstraintsInput(){
         QLineEdit* beta = new QLineEdit(beta_input[i]->text());
         new_beta_input->addWidget(beta);
 
-        QWidget* w = new QWidget();
-        w->setLayout(new_beta_input);
-
         beta_input[i] = beta;;
-        displayInputRow(row, coefs, w);
+        displayInputRow(row, coefs, wrap(new_beta_input));
     }
 
 }
 
-QBoxLayout* SimplexWindow::newConstraintsRowInput(){
-    QBoxLayout* new_row = new QBoxLayout(QBoxLayout::Direction::LeftToRight);
-    new_row->setSizeConstraint(QLayout::SetFixedSize);
+QBoxLayout* SimplexWindow::createConstraintsRowInput(){
+    QBoxLayout* row = new QBoxLayout(QBoxLayout::Direction::LeftToRight);
+    row->setSizeConstraint(QLayout::SetFixedSize);
 
-    QVector<QLineEdit*> coefs_row;
+    QVector<QLineEdit*> coefs_inputlines;
 
     for (std::size_t i = 0; i < vars_number; i++){
-        QBoxLayout* new_coef_input = new QBoxLayout(QBoxLayout::Direction::LeftToRight);
-        new_coef_input->setSizeConstraint(QLayout::SetFixedSize);
-
-        if (i > 0){
-            new_coef_input->addWidget(new QLabel(" + "));
-        }
-
-        QLineEdit* coef_input_line = new QLineEdit();
-        new_coef_input->addWidget(coef_input_line);
-
-        QLabel* new_var_name_label = new QLabel(getVarName(i + 1));
-        new_coef_input->addWidget(new_var_name_label);
-
-        QWidget* w = new QWidget();
-        w->setLayout(new_coef_input);
-
-        new_row->addWidget(w);
-        coefs_row.push_back(coef_input_line);
+        row->addWidget(createCoefInput(coefs_inputlines));
     }
 
 
@@ -246,18 +212,16 @@ QBoxLayout* SimplexWindow::newConstraintsRowInput(){
 
     new_beta_input->addWidget(new QLabel("     =     "));
 
-    QLineEdit* beta = new QLineEdit();
-    new_beta_input->addWidget(beta);
+    QLineEdit* beta_inputline = new QLineEdit();
+    new_beta_input->addWidget(beta_inputline);
 
-    QWidget* w = new QWidget();
-    w->setLayout(new_beta_input);
-    new_row->addWidget(w);
+    row->addWidget(wrap(new_beta_input));
 
 
-    beta_input.push_back(beta);
-    constraints_input.push_back(coefs_row);
+    beta_input.push_back(beta_inputline);
+    constraints_input.push_back(coefs_inputlines);
 
-    return new_row;
+    return row;
 
 }
 
@@ -270,6 +234,44 @@ QString SimplexWindow::getVarName(std::size_t var_index){
 
 
     return vars_names[var_index];
+}
+
+QWidget* SimplexWindow::wrap(QLayout* l){
+    QWidget* w = new QWidget();
+    w->setLayout(l);
+
+    return w;
+}
+
+
+/**
+ * @brief SimplexWindow::createCoefInput
+ * create coef input: ["+"] {inputline} {variable name}
+ * @param is_first
+ * @param line
+ * @return
+ */
+QWidget* SimplexWindow::createCoefInput(QVector<QLineEdit*>& coefs_inputlines_storage){
+    QBoxLayout* coef_input = new QBoxLayout(QBoxLayout::Direction::LeftToRight);
+    coef_input->setSizeConstraint(QLayout::SetFixedSize);
+
+    // add ["+"]
+    if (coefs_inputlines_storage.size() > 0){ // if we add not first inputline in row
+        coef_input->addWidget(new QLabel(" + "));
+    }
+
+    // add {inputline}
+    QLineEdit* coef_inputline = new QLineEdit();
+    coef_input->addWidget(coef_inputline);
+
+    // add {variable name}
+    QString var_name = getVarName(coefs_inputlines_storage.size() + 1);
+    coef_input->addWidget(new QLabel(var_name));
+
+
+    coefs_inputlines_storage.push_back(coef_inputline);
+
+    return wrap(coef_input);
 }
 
 
@@ -285,6 +287,8 @@ void SimplexWindow::on_vars_add_clicked()
     if (vars_number > 1){
         ui->vars_remove->setEnabled(true);
     }
+
+    ui->lineEdit->setText(QString::number(vars_number));
 }
 
 
@@ -302,6 +306,8 @@ void SimplexWindow::on_vars_remove_clicked()
         ui->vars_remove->setEnabled(false);
     }
 
+    ui->lineEdit->setText(QString::number(vars_number));
+
 }
 
 
@@ -314,6 +320,8 @@ void SimplexWindow::on_constraints_add_clicked()
     if (constraints_number > 1){
         ui->constraints_remove->setEnabled(true);
     }
+
+    ui->lineEdit_2->setText(QString::number(constraints_number));
 }
 
 
@@ -329,5 +337,7 @@ void SimplexWindow::on_constraints_remove_clicked()
     if (constraints_number == 1){
         ui->constraints_remove->setEnabled(false);
     }
+
+    ui->lineEdit_2->setText(QString::number(constraints_number));
 }
 

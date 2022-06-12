@@ -42,8 +42,12 @@ private:
 
      void displayFunctionInput();
      void displayConstraintsInput();
-     QBoxLayout* newConstraintsRowInput();
+     QBoxLayout* createConstraintsRowInput();
      QString getVarName(std::size_t var_index);
+
+     QWidget* createCoefInput(QVector<QLineEdit*>& coefs_inputlines_storage);
+
+     QWidget* wrap(QLayout* l);
 
 
     Ui::SimplexWindow *ui;
