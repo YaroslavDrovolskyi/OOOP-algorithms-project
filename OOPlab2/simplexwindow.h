@@ -4,6 +4,10 @@
 #include <QDialog>
 #include <QCloseEvent>
 #include <QTableWidget>
+#include <QBoxLayout>
+
+
+#include <iostream>
 
 #include "SimplexMethodTable.h"
 
@@ -22,11 +26,37 @@ public:
 private slots:
     void on_exitbtn_clicked();
 
+    void on_vars_add_clicked();
+
+    void on_vars_remove_clicked();
+
+    void on_constraints_add_clicked();
+
+    void on_constraints_remove_clicked();
+
 private:
      void closeEvent (QCloseEvent *event) override;
 
 
+     void displayInputRow(QBoxLayout* input_layout, QVector<QLineEdit*>& function_input, QWidget* new_last_item);
+
+     void displayFunctionInput();
+     void displayConstraintsInput();
+     QBoxLayout* newConstraintsRowInput();
+     QString getVarName(std::size_t var_index);
+
+
     Ui::SimplexWindow *ui;
+
+
+    QVector<QString> vars_names; // x0, x1, x2, x3, ...
+    std::size_t vars_number;
+    std::size_t constraints_number;
+
+    QVector<QLineEdit*> function_input;
+    QVector<QVector<QLineEdit*>> constraints_input;
+    QVector<QBoxLayout*> constraints_input_rows;
+    QVector<QLineEdit*> beta_input;
 };
 
 #endif // SIMPLEXWINDOW_H
