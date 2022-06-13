@@ -15,7 +15,7 @@
 #include <memory>
 #include <functional>
 #include <QCloseEvent>
-
+#include "algorithmvisualizer.h"
 #include"memento.h"
 
 QT_BEGIN_NAMESPACE
@@ -46,6 +46,10 @@ private slots:
     void on_genRandInputBtn_clicked();
 
     void on_exitbtn_clicked();
+
+    void on_visualizebtn_clicked();
+
+    void on_hidebtn_clicked();
 
 private:
 
@@ -106,6 +110,8 @@ private:
     algorithm* algorithm_;
 protected:
     Facade* facade  ;
+
+
    // std::unique_ptr<algorithm> algorithm_ = nullptr;
 
 };

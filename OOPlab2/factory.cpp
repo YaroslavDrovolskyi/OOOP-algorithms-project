@@ -12,7 +12,7 @@
 #include <stdexcept>
 #include <QDebug>
 #include "adapter.h"
-//TODO: negative numbers in regex for float
+#include "algorithmvisualizer.h"
 
 
  bool algoCreator::areValidNumbers(const QVector<QString>&listofnumbers, const QRegularExpression& expr)
@@ -47,6 +47,12 @@
 
      return this->mergesorting_;
   }
+
+   void mergeSortCreator::setVisualizer(AlgorithmVisualizer<float>* av)
+   {
+       this->m_algorithmvisualizer.reset(av);
+       this->mergesorting_->setVisualizer(av);
+   }
 
  bool mergeSortCreator::readLine(QString&& line)
  {
