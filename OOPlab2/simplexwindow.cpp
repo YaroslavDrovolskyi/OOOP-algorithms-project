@@ -8,6 +8,7 @@
 #include <QString>
 #include <QLayoutItem>
 #include <QMessageBox>
+#include <random>
 
 #include "SimplexMethod.h"
 #include "SimplexResultVisualizer.h"
@@ -334,6 +335,71 @@ std::vector<double> SimplexWindow::readBeta(){
 
 
 
+void SimplexWindow::generateRandomInput(){
+    // generate target function coefficients
+    std::vector<int> random_function = getRandomIntArray(vars_number, -500, 500);
+    for(std::size_t i = 0; i < vars_number; i++){
+        function_input[i]->setText(QString::number(random_function[i]));
+    }
+
+    // generate random constraint matrix and beta
+    std::vector<int> random_beta = getRandomIntArray(constraints_number, 1, 500);
+    for(std::size_t i = 0; i < constraints_number; i++){
+        std::vector<int> matrix_row = getRandomIntArray(vars_number, -200, 500);
+
+        for (std::size_t j = 0; j < vars_number; j++){
+            constraints_input[i][j]->setText(QString::number(matrix_row[j]));
+        }
+        beta_input[i]->setText(QString::number(random_beta[i]));
+    }
+
+
+    // generate basis cols (unit vectors)
+    if (constraints_number > vars_number){ // system will not have solutions
+        return;
+    }
+
+    std::size_t basis_vectors_number = std::min(constraints_number, vars_number);
+    std::vector<int> basis_cols_index = getRandomIntArray(basis_vectors_number, 0, vars_number);
+    QVector<bool> is_basis_col(vars_number, false);
+
+    for (std::size_t i = 0; i < basis_vectors_number; i++){
+        // choose random col to make it basis
+        std::size_t random_col = rand() % vars_number;
+        while(is_basis_col[random_col]){
+            random_col = rand() % vars_number;
+        }
+        is_basis_col[random_col] = true;
+
+        // write basis col
+        for (std::size_t j = 0; j < constraints_number; j++){
+            constraints_input[j][random_col]->setText("0");
+        }
+        constraints_input[i][random_col]->setText("1");
+    }
+}
+
+
+std::vector<int> SimplexWindow::getRandomIntArray(std::size_t size, int min, int max){
+    assert(size >= 1);
+    assert(min < max);
+
+    std::vector<int> result;
+
+    static std::default_random_engine gen;
+    std::uniform_int_distribution<int>dis(min, max);
+
+
+    for (std::size_t i = 0; i < size; i++){
+        result.push_back(dis(gen));
+    }
+
+    return result;
+}
+
+
+
+
 void SimplexWindow::on_vars_add_clicked()
 {
     vars_number++;
@@ -419,5 +485,11 @@ void SimplexWindow::on_btnrun_clicked()
 
 
 
+}
+
+
+void SimplexWindow::on_pushButton_clicked()
+{
+    generateRandomInput();
 }
 

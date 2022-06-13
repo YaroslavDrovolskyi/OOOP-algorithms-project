@@ -36,6 +36,8 @@ private slots:
 
     void on_btnrun_clicked();
 
+    void on_pushButton_clicked();
+
 private:
     void closeEvent (QCloseEvent *event) override;
 
@@ -54,6 +56,9 @@ private:
     std::vector<double> readCoefs();
     ConstraintMatrix<double> readMatrix();
     std::vector<double> readBeta();
+
+    void generateRandomInput();
+    std::vector<int> getRandomIntArray(std::size_t size, int min, int max); // need to fix: move to new .h file
 
 
     Ui::SimplexWindow *ui;
