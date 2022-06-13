@@ -16,6 +16,12 @@ QWidget* SimplexResultVisualizer::visualizeSimplexResult(const SimplexMethodSolu
     QBoxLayout* layout = new QBoxLayout(QBoxLayout::Direction::TopToBottom);
     layout->setSpacing(10);
 
+    // visualize title
+    QFont title_font("Arial", 16, QFont::Bold);
+    QLabel* title = new QLabel("Solution");
+    title->setFont(title_font);
+    layout->addWidget(title);
+
     // visualize function
     layout->addWidget(visualizeFunction());
 
@@ -57,8 +63,13 @@ QTableWidget* SimplexResultVisualizer::visualizeSimplexTable(const SimplexMethod
     table->setHorizontalHeaderLabels(colnames);
     table->verticalHeader()->setVisible(false);
 
-//    std::cout << table->rowHeight(0) << std::endl;
-    table->setMinimumHeight((n_rows + 1) * 50); // for scroll line not to appear
+//    std::cout << table->rowHeight(0) << std::endl; //
+//    std::cout << table->columnWidth(0) << std::endl; //
+
+    // for scroll line not to appear
+    table->setMinimumSize((n_cols + 1) * 100, (n_rows + 1) * 50);
+    table->setMaximumSize((n_cols + 1) * 100, (n_rows + 1) * 50);
+
 
 
     // set c_basis and x_basis columns

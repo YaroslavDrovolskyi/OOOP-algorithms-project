@@ -72,6 +72,10 @@ private:
     QVector<QVector<QLineEdit*>> constraints_input;
     QVector<QBoxLayout*> constraints_input_rows;
     QVector<QLineEdit*> beta_input;
+
+    QBoxLayout* function_layout;
+    QBoxLayout* constraints_layout;
+    QWidget* solution_widget;
 };
 
 #endif // SIMPLEXWINDOW_H

@@ -15,9 +15,12 @@
 
 SimplexWindow::SimplexWindow(QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::SimplexWindow)
+    ui(new Ui::SimplexWindow),
+    solution_widget(nullptr)
 {
     ui->setupUi(this);
+
+    QFont title_font("Arial", 16, QFont::Bold);
 
 /*
     QBoxLayout* layout = new QBoxLayout(QBoxLayout::Direction::TopToBottom);
@@ -52,7 +55,7 @@ SimplexWindow::SimplexWindow(QWidget *parent) :
 
     std::vector<double> beta = { 10, 15, 20 };
 
-
+/*
     SimplexMethod simplex(coefs, matrix, beta);
     simplex.run();
     auto s = simplex.getSolution();
@@ -64,26 +67,49 @@ SimplexWindow::SimplexWindow(QWidget *parent) :
 
 
     this->ui->scrollArea->setWidget(w);
-
+*/
 
 //    ui->horizontalLayout_2->widget()->layout()
+
+//    QBoxLayout* ;
+//    QBoxLayout* constraints_layout;
+
+    // create widget for main scrollarea that will contain layout with all items created in code below
+    QWidget* main_widget = new QWidget();
+    main_widget->setLayout(new QBoxLayout(QBoxLayout::Direction::TopToBottom));
+    main_widget->layout()->setSizeConstraint(QLayout::SetFixedSize);
+    ui->scrollArea->setWidget(main_widget);
+
+    // add title "Target function"
+    QLabel* label_1 = new QLabel("Target function");
+    label_1->setFont(title_font);
+    ui->scrollArea->widget()->layout()->addWidget(label_1);
+    ui->scrollArea->widget()->layout()->addWidget(new QLabel(QString("We will find minimum value of target function according ") +
+                                                             QString("to input constraints")));
+
+    // add input for target function coefficients
     QWidget* function_input = new QWidget();
-    function_input->setLayout(new QBoxLayout(QBoxLayout::Direction::LeftToRight));
-
-//    function_input->layout()->addWidget(new QLabel("     -> min")); /////////////////////////////////////////
+    this->function_layout = new QBoxLayout(QBoxLayout::Direction::LeftToRight);
+    function_input->setLayout(this->function_layout);
     function_input->layout()->setSizeConstraint(QLayout::SetFixedSize);
-    ui->scrollArea_2->setWidget(function_input);
+    ui->scrollArea->widget()->layout()->addWidget(function_input);
 
 
+    // add title "Constraints"
+    QLabel* label_2 = new QLabel("Constraints");
+    label_2->setFont(title_font);
+    ui->scrollArea->widget()->layout()->addWidget(label_2);
+    ui->scrollArea->widget()->layout()->addWidget(new QLabel("Number of constrains must be <= number of variables"));
 
-    //
+    // add input for constraints coefficients
     QWidget* constraints_input = new QWidget();
-    constraints_input->setLayout(new QBoxLayout(QBoxLayout::Direction::TopToBottom));
+    this->constraints_layout = new QBoxLayout(QBoxLayout::Direction::TopToBottom);
+    constraints_input->setLayout(this->constraints_layout);
     constraints_input->layout()->setSizeConstraint(QLayout::SetFixedSize);
-    ui->scrollArea_3->setWidget(constraints_input);
+    ui->scrollArea->widget()->layout()->addWidget(constraints_input);
 
 
-    this->constraints_number = 5;
+    this->constraints_number = 1;
     this->vars_number = 1;
     displayFunctionInput();
     displayConstraintsInput();
@@ -150,15 +176,16 @@ void SimplexWindow::displayInputRow(QBoxLayout* row_layout, QVector<QLineEdit*>&
 
 
 void SimplexWindow::displayFunctionInput(){
-    QBoxLayout* input_layout = qobject_cast<QBoxLayout*>(ui->scrollArea_2->widget()->layout());
+//    QBoxLayout* input_layout = qobject_cast<QBoxLayout*>(ui->scrollArea_2->widget()->layout());
+    QBoxLayout* input_layout = function_layout;
     displayInputRow(input_layout, function_input, nullptr);
 }
 
 
 
 void SimplexWindow::displayConstraintsInput(){
-    QBoxLayout* input_layout = qobject_cast<QBoxLayout*>(ui->scrollArea_3->widget()->layout());
-
+//    QBoxLayout* input_layout = qobject_cast<QBoxLayout*>(ui->scrollArea_3->widget()->layout());
+        QBoxLayout* input_layout = constraints_layout;
     // if number of rows changed
     while(constraints_input.size() < constraints_number){
         QBoxLayout* new_row = createConstraintsRowInput();
@@ -477,7 +504,14 @@ void SimplexWindow::on_btnrun_clicked()
         SimplexResultVisualizer visualizer;
         QWidget* w = visualizer.visualizeSimplexResult(solution);
 
-        this->ui->scrollArea->setWidget(w);
+
+        if (solution_widget){
+            ui->scrollArea->widget()->layout()->removeWidget(solution_widget);
+            delete solution_widget;
+        }
+        solution_widget = w;
+        ui->scrollArea->widget()->layout()->addWidget(w);
+//        this->ui->scrollArea->setWidget(w);
     }
     catch(const std::exception& e){
         QMessageBox::warning(this, "Warning", e.what());

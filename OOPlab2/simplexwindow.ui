@@ -2,6 +2,9 @@
 <ui version="4.0">
  <class>SimplexWindow</class>
  <widget class="QDialog" name="SimplexWindow">
+  <property name="windowModality">
+   <enum>Qt::NonModal</enum>
+  </property>
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -10,8 +13,19 @@
     <height>576</height>
    </rect>
   </property>
+  <property name="font">
+   <font>
+    <pointsize>8</pointsize>
+   </font>
+  </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Simplex method</string>
+  </property>
+  <property name="sizeGripEnabled">
+   <bool>false</bool>
+  </property>
+  <property name="modal">
+   <bool>false</bool>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
    <item>
@@ -50,6 +64,11 @@
           </property>
           <item>
            <widget class="QLabel" name="label_3">
+            <property name="font">
+             <font>
+              <pointsize>10</pointsize>
+             </font>
+            </property>
             <property name="text">
              <string>Number of variables:</string>
             </property>
@@ -57,6 +76,11 @@
           </item>
           <item>
            <widget class="QLineEdit" name="lineEdit">
+            <property name="font">
+             <font>
+              <pointsize>10</pointsize>
+             </font>
+            </property>
             <property name="readOnly">
              <bool>true</bool>
             </property>
@@ -64,6 +88,11 @@
           </item>
           <item>
            <widget class="QPushButton" name="vars_add">
+            <property name="font">
+             <font>
+              <pointsize>10</pointsize>
+             </font>
+            </property>
             <property name="text">
              <string>+</string>
             </property>
@@ -71,6 +100,11 @@
           </item>
           <item>
            <widget class="QPushButton" name="vars_remove">
+            <property name="font">
+             <font>
+              <pointsize>10</pointsize>
+             </font>
+            </property>
             <property name="text">
              <string>-</string>
             </property>
@@ -85,6 +119,11 @@
           </property>
           <item>
            <widget class="QLabel" name="label_4">
+            <property name="font">
+             <font>
+              <pointsize>10</pointsize>
+             </font>
+            </property>
             <property name="text">
              <string>Number of constraints:</string>
             </property>
@@ -92,6 +131,11 @@
           </item>
           <item>
            <widget class="QLineEdit" name="lineEdit_2">
+            <property name="font">
+             <font>
+              <pointsize>10</pointsize>
+             </font>
+            </property>
             <property name="readOnly">
              <bool>true</bool>
             </property>
@@ -99,6 +143,11 @@
           </item>
           <item>
            <widget class="QPushButton" name="constraints_add">
+            <property name="font">
+             <font>
+              <pointsize>10</pointsize>
+             </font>
+            </property>
             <property name="text">
              <string>+</string>
             </property>
@@ -106,6 +155,11 @@
           </item>
           <item>
            <widget class="QPushButton" name="constraints_remove">
+            <property name="font">
+             <font>
+              <pointsize>10</pointsize>
+             </font>
+            </property>
             <property name="text">
              <string>-</string>
             </property>
@@ -114,54 +168,6 @@
          </layout>
         </item>
        </layout>
-      </item>
-      <item>
-       <widget class="QLabel" name="label">
-        <property name="text">
-         <string>Target function</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QScrollArea" name="scrollArea_2">
-        <property name="widgetResizable">
-         <bool>true</bool>
-        </property>
-        <widget class="QWidget" name="scrollAreaWidgetContents_2">
-         <property name="geometry">
-          <rect>
-           <x>0</x>
-           <y>0</y>
-           <width>960</width>
-           <height>93</height>
-          </rect>
-         </property>
-        </widget>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="label_2">
-        <property name="text">
-         <string>Restrictions</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QScrollArea" name="scrollArea_3">
-        <property name="widgetResizable">
-         <bool>true</bool>
-        </property>
-        <widget class="QWidget" name="scrollAreaWidgetContents_3">
-         <property name="geometry">
-          <rect>
-           <x>0</x>
-           <y>0</y>
-           <width>960</width>
-           <height>92</height>
-          </rect>
-         </property>
-        </widget>
-       </widget>
       </item>
       <item>
        <widget class="QScrollArea" name="scrollArea">
@@ -189,7 +195,7 @@
            <x>0</x>
            <y>0</y>
            <width>960</width>
-           <height>98</height>
+           <height>337</height>
           </rect>
          </property>
          <layout class="QGridLayout" name="gridLayout_2"/>
@@ -198,6 +204,11 @@
       </item>
       <item>
        <widget class="QPushButton" name="pushButton">
+        <property name="font">
+         <font>
+          <pointsize>10</pointsize>
+         </font>
+        </property>
         <property name="text">
          <string>Generate random input</string>
         </property>
@@ -205,6 +216,11 @@
       </item>
       <item>
        <widget class="QPushButton" name="btnrun">
+        <property name="font">
+         <font>
+          <pointsize>10</pointsize>
+         </font>
+        </property>
         <property name="text">
          <string>Run algorithm</string>
         </property>
@@ -229,6 +245,11 @@
           <width>100</width>
           <height>16777215</height>
          </size>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>10</pointsize>
+         </font>
         </property>
         <property name="layoutDirection">
          <enum>Qt::RightToLeft</enum>
