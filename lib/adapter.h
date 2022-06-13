@@ -17,7 +17,7 @@
   *
 */
 template<typename T, typename Comparator>
-class ALGOSLIB_EXPORT AdapterForSortArrayAlgo : public sortingalgo<Comparator>
+class ALGOSLIB_EXPORT AdapterForSortArrayAlgo : public sortingalgo<T,Comparator>
 {
 private:
     SortArrayAlgo<T, Comparator>* sort_algo;

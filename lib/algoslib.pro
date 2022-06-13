@@ -17,6 +17,7 @@ SOURCES += \
     algoslib.cpp
 
 HEADERS += \
+    AlgoVisualizerObserver.h \
     ConstraintMatrix.h \
     SimplexMethod.h \
     SimplexMethodTable.h \

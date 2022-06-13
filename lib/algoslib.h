@@ -12,6 +12,7 @@
 #include <memory>
 #include <functional>
 #include <utility>
+#include "AlgoVisualizerObserver.h"
 
 /**!
   *     \brief Abstract class for all algos
@@ -34,7 +35,7 @@ public:
   *     \brief Abstract class for all sorting algos
   *
 */
-template<typename Comparator>
+template<typename T,typename Comparator>
 class ALGOSLIB_EXPORT sortingalgo:  public algorithm
 {
 public:
@@ -43,12 +44,14 @@ public:
 
    std::string gettype() override; //< overriding base class method
 
+   void setVisualizer( visualizerObserver<T>*);
 
 
    virtual ~sortingalgo();
 
 protected:
     std::function<Comparator> comparator;
+    visualizerObserver<T>* m_visualizer;
 private:
    std::string type;
 };
@@ -76,7 +79,7 @@ private:
 
 
 template<typename T,  typename Comparator>
-class ALGOSLIB_EXPORT mergesorting :  public sortingalgo<Comparator>
+class ALGOSLIB_EXPORT mergesorting :  public sortingalgo<T,Comparator>
 {
 public:
 
@@ -112,7 +115,7 @@ private:
 
 
 template<typename T,  typename Comparator>
- class ALGOSLIB_EXPORT quicksorting : public sortingalgo<Comparator>
+ class ALGOSLIB_EXPORT quicksorting : public sortingalgo<T,Comparator>
  {
  public:
 
@@ -151,7 +154,7 @@ protected:
 
 
 template<typename T,  typename Comparator>
-  class ALGOSLIB_EXPORT heapsorting :public sortingalgo<Comparator>
+  class ALGOSLIB_EXPORT heapsorting :public sortingalgo<T,Comparator>
  {
  public:
 
@@ -191,7 +194,7 @@ template<typename T,  typename Comparator>
 
 
 template<typename T,  typename Comparator>
-  class ALGOSLIB_EXPORT countingsorting :public sortingalgo<Comparator>
+  class ALGOSLIB_EXPORT countingsorting :public sortingalgo<T,Comparator>
  {
  public:
 
@@ -232,7 +235,7 @@ template<typename T,  typename Comparator>
 
 
 template<typename T,  typename Comparator>
-  class ALGOSLIB_EXPORT  radixsorting :public sortingalgo<Comparator>
+  class ALGOSLIB_EXPORT  radixsorting :public sortingalgo<T,Comparator>
  {
  public:
      ~radixsorting();
@@ -267,7 +270,7 @@ template<typename T,  typename Comparator>
 
  };
 template<typename T,  typename Comparator>
-  class ALGOSLIB_EXPORT insertionsorting :public sortingalgo<Comparator>
+  class ALGOSLIB_EXPORT insertionsorting :public sortingalgo<T,Comparator>
  {
  public:
      ~insertionsorting();
@@ -298,7 +301,7 @@ void insertionsort(std::vector<T>& arr);
 
  };
 template<typename T,  typename Comparator>
-  class ALGOSLIB_EXPORT bucketsorting :public sortingalgo<Comparator>
+  class ALGOSLIB_EXPORT bucketsorting :public sortingalgo<T,Comparator>
  {
  public:
     ~bucketsorting();

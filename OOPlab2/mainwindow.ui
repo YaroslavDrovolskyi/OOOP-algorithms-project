@@ -68,6 +68,31 @@
         </widget>
        </item>
        <item>
+        <widget class="QFrame" name="visualizationFrame">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+           <horstretch>5</horstretch>
+           <verstretch>50</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="layoutDirection">
+          <enum>Qt::RightToLeft</enum>
+         </property>
+         <property name="frameShape">
+          <enum>QFrame::StyledPanel</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Raised</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QLineEdit" name="inputline"/>
        </item>
        <item>
@@ -96,7 +121,7 @@
             <x>0</x>
             <y>0</y>
             <width>706</width>
-            <height>148</height>
+            <height>116</height>
            </rect>
           </property>
           <layout class="QGridLayout" name="gridLayout_2">
@@ -160,9 +185,32 @@
         </widget>
        </item>
        <item>
+        <widget class="QPushButton" name="visualizebtn">
+         <property name="text">
+          <string>Visualize</string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QPushButton" name="btnrun">
          <property name="text">
           <string>Run algorithm</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="hidebtn">
+         <property name="maximumSize">
+          <size>
+           <width>100</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="layoutDirection">
+          <enum>Qt::RightToLeft</enum>
+         </property>
+         <property name="text">
+          <string>Hide visualization</string>
          </property>
         </widget>
        </item>

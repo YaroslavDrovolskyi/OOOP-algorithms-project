@@ -9,19 +9,24 @@
 #include <string>
 #include <exception>
 #include <functional>
-
+#include "AlgoVisualizerObserver.h"
 
 algorithm::algorithm() = default;
 algorithm::~algorithm() =default ;
 
-template< typename Comparator>
-sortingalgo<Comparator>::sortingalgo() { this->type = "sorting"; };
-template< typename Comparator>
-sortingalgo<Comparator>::~sortingalgo() = default;
-template< typename Comparator>
-std::string sortingalgo<Comparator>::gettype()
+template<typename T, typename Comparator>
+sortingalgo<T,Comparator>::sortingalgo():m_visualizer(nullptr) { this->type = "sorting"; };
+template<typename T, typename Comparator>
+sortingalgo<T,Comparator>::~sortingalgo() = default;
+template<typename T, typename Comparator>
+std::string sortingalgo<T,Comparator>::gettype()
 {
     return this->type;
+}
+template<typename T, typename Comparator>
+void sortingalgo<T,Comparator>::setVisualizer( visualizerObserver<T>* v)
+{
+    this->m_visualizer = v;
 }
 
 
@@ -44,6 +49,7 @@ template<typename T,  typename Comparator>
 void mergesorting<T,Comparator>::merge(std::vector<T>& arr, int p, int mid, int r)
 {
 
+   this->m_visualizer->highlight(p,r,this->m_visualizer->getColor(baseVisualizerObserver::Colors::YELLOW));
 
     std::vector<T>left(mid - p + 1);
     std::vector<T>right(r - mid);
@@ -86,7 +92,7 @@ void mergesorting<T,Comparator>::merge(std::vector<T>& arr, int p, int mid, int 
         rightindex++;
         arrindex++;
     }
-
+    this->m_visualizer->reReadVector(arr,p, r);
 }
 template<typename T,  typename Comparator>
  mergesorting<T,Comparator>* mergesorting<T,Comparator>::GetInstance(std::vector<T>& v, Comparator c)
@@ -123,6 +129,10 @@ void mergesorting<T,Comparator>::run()
 {
     int p = 0;
     int len = this->vec.size();
+
+    if(this->m_visualizer)
+        this->m_visualizer->readVector(this->vec);
+
     this->mergesort(this->vec, p, len - 1);
 
 
@@ -143,12 +153,15 @@ mergesorting<T,Comparator>::mergesorting(std::vector<T>& v,Comparator c) :vec(v)
 {
     this->name = "mergesort";
     this->comparator = c;
+
 }
 template<typename T,  typename Comparator>
 mergesorting<T,Comparator>::mergesorting(Comparator c)
 {
     this->name = "mergesort";
     this->comparator = c;
+
+
 }
 template<typename T,  typename Comparator>
 mergesorting<T,Comparator>::~mergesorting() {mergesorting_ = nullptr;};
@@ -1053,10 +1066,10 @@ uint32_t boyermoor::getmemory()
  int boyermoor::getId(){return this->id;}
 
 
- template class sortingalgo<bool(float, float)>;
- template class sortingalgo<bool(int, int)>;
- template class sortingalgo<bool(double, double)>;
- template class sortingalgo<bool(uint32_t, uint32_t)>;
+ template class sortingalgo<float,bool(float, float)>;
+ template class sortingalgo<int,bool(int, int)>;
+ template class sortingalgo<double,bool(double, double)>;
+ template class sortingalgo<uint32_t,bool(uint32_t, uint32_t)>;
 
  template class mergesorting<float,bool(float, float)>;
  template class mergesorting<int,bool(int, int)>;

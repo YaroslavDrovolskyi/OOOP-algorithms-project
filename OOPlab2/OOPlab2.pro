@@ -22,6 +22,7 @@ SOURCES += \
 
 HEADERS += \
     SimplexResultVisualizer.h \
+    algorithmvisualizer.h \
     facadeinfo.h \
     factory.h \
     mainmenu.h \

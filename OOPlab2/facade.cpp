@@ -9,11 +9,8 @@
 #include "visitor.h"
 #include <QDebug>
 #include "facadeinfo.h"
-
-
-
-
-
+#include "AlgoVisualizerObserver.h"
+#include "algorithmvisualizer.h"
 
 /**!
   *     It is the main fnction in Facade class. It launch algo and create result-of-algo structure according
@@ -78,7 +75,14 @@
 
      }
 
-
+//        void Facade::setAlgorithmVisualizer(baseVisualizerObserver*av)
+//        {
+//            this->m_algorithmvisualizer.reset(av);
+//        }
+//       baseVisualizerObserver* Facade::getAlgorithmVisualizer() const
+//       {
+//           return this->m_algorithmvisualizer.get();
+//       }
 
  /**!
    *     This method create AlgoCreator for specific algorithm according to name of algorithm selected by user
@@ -89,6 +93,8 @@
  void Facade::selectCreator(int index)
  {
 
+
+
      this->algoCreator_.reset();
      switch (index) {
      case(0):
@@ -98,6 +104,18 @@
     else
           this->algoCreator_ =std::make_shared<mergeSortCreator>( std::move(this->inputLine),this->comparatorDescend<float>);
         // this->algoCreator_ =std::make_shared<mergeSortCreator>( std::move(this->inputLine),this->currentComparator<float>);
+        if(this->visualize)
+          {
+//           this->setAlgorithmVisualizer(dynamic_cast<baseVisualizerObserver*>(new AlgorithmVisualizer<float>(
+//                                                                       this->m_frameinfo.heigth,
+//                                                                       this->m_frameinfo.width,
+//                                                                       this->m_frameinfo.frame_ptr)));
+                auto p =dynamic_cast<mergeSortCreator*>(this->algoCreator_.get());
+                p->setVisualizer(new AlgorithmVisualizer<float>(
+                                     this->m_frameinfo.heigth,
+                                     this->m_frameinfo.width,
+                                     this->m_frameinfo.frame_ptr));
+          }
          break;
      case(1):
          if(this->isAscend)
@@ -286,4 +304,12 @@ void Facade::setIsAscend(bool b)
     this->isAscend = b;
 }
 
+Facade::visualizationFrameInfo::visualizationFrameInfo(size_t h,size_t w,QFrame*fr):
+                                        heigth(h),width(w),frame_ptr(fr)
+{
+}
 
+void Facade::setFrameInfo(visualizationFrameInfo&& fr_inf)
+{
+    this->m_frameinfo = fr_inf;
+}

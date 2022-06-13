@@ -16,6 +16,8 @@
 #include <set>
 #include <random>
 #include <QCloseEvent>
+#include <QObject>
+#include "algorithmvisualizer.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -43,6 +45,14 @@ MainWindow::MainWindow(QWidget *parent)
 
     //table width
     ui->resultTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+
+    //hide unused widgets
+    ui->visualizationFrame->hide();
+    ui->hidebtn->hide();
+
+
+
+
 
 }
 
@@ -323,5 +333,43 @@ void MainWindow::on_exitbtn_clicked()
     QWidget* par = qobject_cast<QWidget*>(this->parent());
     par->show();
     this->close();
+}
+
+
+void MainWindow::on_visualizebtn_clicked()
+{
+    ui->resultTable->hide();
+
+    ui->visualizationFrame->show();
+    ui->hidebtn->show();
+
+    size_t height = this->ui->resultTable->height();
+     size_t width = this->ui->resultTable->width();
+     Facade::visualizationFrameInfo fr_inf(height,width,ui->visualizationFrame);
+
+    this->facade->setFrameInfo(std::move(fr_inf));
+
+//    if(this->ui->visualizationFrame->layout())
+//    {
+
+//    delete this->ui->visualizationFrame->layout();
+//    this->ui->visualizationFrame->setLayout(nullptr);
+
+//    }
+
+    //if(!this->facade->getAlgorithmVisualizer())
+   // {
+
+   // }
+    on_btnrun_clicked();
+
+
+
+}
+void MainWindow::on_hidebtn_clicked()
+{
+    ui->resultTable->show();
+    ui->visualizationFrame->hide();
+    ui->hidebtn->hide();
 }
 

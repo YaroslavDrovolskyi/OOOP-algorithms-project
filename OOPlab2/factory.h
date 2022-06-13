@@ -12,7 +12,8 @@
 #include <vector>
 #include "facadeinfo.h"
 #include <QDebug>
-
+#include <algorithmvisualizer.h>
+#include "AlgoVisualizerObserver.h"
 
 /**!
   *     \brief Abstract class for all algo creators. Each subclass is creator for conctrete algorithm
@@ -48,11 +49,12 @@ public:
          delete this->mergesorting_;
         this->mergesorting_ = nullptr;
     }
+    void setVisualizer(AlgorithmVisualizer<float>*);
 private:
     void convertToQString() override;
     bool readLine(QString&&) override;
     std::vector<float> vec;
-
+    std::unique_ptr<AlgorithmVisualizer<float>> m_algorithmvisualizer;
     mergesorting<float,bool(float,float)>*mergesorting_;
 };
 
