@@ -34,20 +34,26 @@ private slots:
 
     void on_constraints_remove_clicked();
 
+    void on_btnrun_clicked();
+
 private:
-     void closeEvent (QCloseEvent *event) override;
+    void closeEvent (QCloseEvent *event) override;
 
 
-     void displayInputRow(QBoxLayout* input_layout, QVector<QLineEdit*>& function_input, QWidget* new_last_item);
+    void displayInputRow(QBoxLayout* input_layout, QVector<QLineEdit*>& function_input, QWidget* new_last_item);
 
-     void displayFunctionInput();
-     void displayConstraintsInput();
-     QBoxLayout* createConstraintsRowInput();
-     QString getVarName(std::size_t var_index);
+    void displayFunctionInput();
+    void displayConstraintsInput();
+    QBoxLayout* createConstraintsRowInput();
+    QString getVarName(std::size_t var_index);
 
-     QWidget* createCoefInput(QVector<QLineEdit*>& coefs_inputlines_storage);
+    QWidget* createCoefInput(QVector<QLineEdit*>& coefs_inputlines_storage);
 
-     QWidget* wrap(QLayout* l);
+    QWidget* wrap(QLayout* l);
+
+    std::vector<double> readCoefs();
+    ConstraintMatrix<double> readMatrix();
+    std::vector<double> readBeta();
 
 
     Ui::SimplexWindow *ui;

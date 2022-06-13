@@ -7,6 +7,7 @@
 #include <QVector>
 #include <QString>
 #include <QLayoutItem>
+#include <QMessageBox>
 
 #include "SimplexMethod.h"
 #include "SimplexResultVisualizer.h"
@@ -121,8 +122,8 @@ void SimplexWindow::displayInputRow(QBoxLayout* row_layout, QVector<QLineEdit*>&
     // remove terminated item for correct inserting
     QLayoutItem* detached_last_item = row_layout->takeAt(coefs_inputlines_storage.size());
     if (detached_last_item){
-        delete detached_last_item;
         delete detached_last_item->widget();
+        delete detached_last_item;
     }
 
 
@@ -275,6 +276,62 @@ QWidget* SimplexWindow::createCoefInput(QVector<QLineEdit*>& coefs_inputlines_st
 }
 
 
+std::vector<double> SimplexWindow::readCoefs(){
+    std::vector<double> result;
+    for(std::size_t i = 0; i < function_input.size(); i++){
+        const QLineEdit* coef_input = function_input[i];
+
+        bool is_valid;
+        double coef = coef_input->text().toDouble(&is_valid);
+        if (!is_valid){
+            QString error_message = "Invalid " + QString::number(i + 1) + "-th coefficient";
+            throw std::invalid_argument(error_message.toStdString().c_str());
+        }
+
+        result.push_back(coef);
+    }
+
+    return result;
+}
+ConstraintMatrix<double> SimplexWindow::readMatrix(){
+    std::vector<std::vector<double>> matrix(constraints_number);
+
+    for(std::size_t i = 0; i < this->constraints_input.size(); i++){
+        for(std::size_t j = 0; j < this->constraints_input[i].size(); j++){
+            const QLineEdit* coef_input = constraints_input[i][j];
+
+            bool is_valid;
+            double coef = coef_input->text().toDouble(&is_valid);
+            if (!is_valid){
+                QString error_message = "Invalid (" + QString::number(i + 1) + ", " + QString::number(j + 1) + ") matrix coefficient";
+                throw std::invalid_argument(error_message.toStdString().c_str());
+            }
+
+            matrix[i].push_back(coef);
+        }
+    }
+
+    return ConstraintMatrix<double>(matrix);
+}
+
+std::vector<double> SimplexWindow::readBeta(){
+    std::vector<double> result;
+    for(std::size_t i = 0; i < beta_input.size(); i++){
+        const QLineEdit* coef_input = beta_input[i];
+
+        bool is_valid;
+        double coef = coef_input->text().toDouble(&is_valid);
+        if (!is_valid){
+            QString error_message = "Invalid " + QString::number(i + 1) + "-th beta";
+            throw std::invalid_argument(error_message.toStdString().c_str());
+        }
+
+        result.push_back(coef);
+    }
+
+    return result;
+}
+
 
 
 void SimplexWindow::on_vars_add_clicked()
@@ -339,5 +396,28 @@ void SimplexWindow::on_constraints_remove_clicked()
     }
 
     ui->lineEdit_2->setText(QString::number(constraints_number));
+}
+
+
+void SimplexWindow::on_btnrun_clicked()
+{
+    try{
+        SimplexMethod simplex(readCoefs(), readMatrix(), readBeta());
+        simplex.run();
+
+        // visualize solution
+        auto solution = simplex.getSolution();
+
+        SimplexResultVisualizer visualizer;
+        QWidget* w = visualizer.visualizeSimplexResult(solution);
+
+        this->ui->scrollArea->setWidget(w);
+    }
+    catch(const std::exception& e){
+        QMessageBox::warning(this, "Warning", e.what());
+    }
+
+
+
 }
 
