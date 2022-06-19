@@ -13,6 +13,79 @@
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">QScrollBar::vertical{
+background: none;
+border-style: outset;
+border-width: 1px;
+border:none;
+width:7px;
+border-radius: 3px;
+}
+
+QScrollBar::handle:vertical {
+background-color: #808080;
+border-style: outset;
+border-width: 1px;
+border-radius: 3px;
+width:7px;
+}
+
+QScrollBar::sub-line:vertical {
+	border: none;
+      background: none;
+
+}
+
+
+/* BTN BOTTOM - SCROLLBAR */
+QScrollBar::add-line:vertical {
+		border: none;
+      background: none;
+}
+QScrollBar::up-arrow:vertical, QScrollBar::down-arrow:vertical {
+	background: none;
+}
+QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
+	background: none;
+}
+QHeaderView::section
+{
+
+    background-color: #808080;
+	color:#F5F5DC;
+    padding: 4px;
+    font:bold 14px;
+
+}
+QHeaderView::section:checked
+{
+    background-color:FFFFFF;
+	
+    
+}
+QTableView
+{
+    font:bold 14px;
+
+}
+QTableView::item
+{
+	background-color: #808080;
+	color:#F5F5DC;
+}
+QTableView::item::selected
+{
+	background-color: #464646;
+    
+}
+
+QTableView QTableCornerButton::section
+{
+    background-color: #808080;
+    
+}</string>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <property name="sizePolicy">
     <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -48,7 +121,7 @@
        </size>
       </property>
       <property name="title">
-       <string>GroupBox</string>
+       <string/>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout">
        <item>
@@ -58,6 +131,9 @@
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">background-color:#F8F8FF</string>
          </property>
          <attribute name="horizontalHeaderCascadingSectionResizes">
           <bool>true</bool>
@@ -93,7 +169,17 @@
         </widget>
        </item>
        <item>
-        <widget class="QLineEdit" name="inputline"/>
+        <widget class="QLineEdit" name="inputline">
+         <property name="styleSheet">
+          <string notr="true">background-color: #F8F8FF;
+color:#808080;
+ border-style: outset;
+    border-width: 2px;
+    border-radius: 10px;
+    font: bold 11px;
+padding: 5px</string>
+         </property>
+        </widget>
        </item>
        <item>
         <widget class="QScrollArea" name="scrollArea">
@@ -110,9 +196,13 @@
           </size>
          </property>
          <property name="styleSheet">
-          <string notr="true"/>
+          <string notr="true">
+</string>
          </property>
          <property name="widgetResizable">
+          <bool>true</bool>
+         </property>
+         <property name="scrollBarStyle" stdset="0">
           <bool>true</bool>
          </property>
          <widget class="QWidget" name="scrollAreaWidgetContents">
@@ -120,23 +210,51 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>706</width>
-            <height>116</height>
+            <width>699</width>
+            <height>162</height>
            </rect>
           </property>
           <layout class="QGridLayout" name="gridLayout_2">
            <item row="4" column="3">
             <widget class="QRadioButton" name="radioDescend">
+             <property name="styleSheet">
+              <string notr="true">background-color: #808080;
+color:#F5F5DC;
+ border-style: outset;
+    border-width: 2px;
+    border-radius: 10px;
+    font: bold 14px;
+padding: 5px</string>
+             </property>
              <property name="text">
               <string>Sort in descending order</string>
              </property>
             </widget>
            </item>
            <item row="0" column="1">
-            <widget class="QComboBox" name="algoselector"/>
+            <widget class="QComboBox" name="algoselector">
+             <property name="styleSheet">
+              <string notr="true">background-color: #808080;
+color:#F5F5DC;
+ border-style: outset;
+    border-width: 2px;
+    border-radius: 10px;
+    font: bold 14px;
+padding: 5px</string>
+             </property>
+            </widget>
            </item>
            <item row="4" column="1" alignment="Qt::AlignHCenter">
             <widget class="QCheckBox" name="checkBoxTime">
+             <property name="styleSheet">
+              <string notr="true">background-color: #808080;
+color:#F5F5DC;
+ border-style: outset;
+    border-width: 2px;
+    border-radius: 10px;
+    font: bold 14px;
+padding: 5px</string>
+             </property>
              <property name="text">
               <string>Time</string>
              </property>
@@ -144,6 +262,15 @@
            </item>
            <item row="3" column="3">
             <widget class="QRadioButton" name="radioAscend">
+             <property name="styleSheet">
+              <string notr="true">background-color: #808080;
+color:#F5F5DC;
+ border-style: outset;
+    border-width: 2px;
+    border-radius: 10px;
+    font: bold 14px;
+padding: 5px</string>
+             </property>
              <property name="text">
               <string>Sort in ascending order</string>
              </property>
@@ -151,6 +278,15 @@
            </item>
            <item row="3" column="1" alignment="Qt::AlignHCenter">
             <widget class="QCheckBox" name="checkBoxMemory">
+             <property name="styleSheet">
+              <string notr="true">background-color: #808080;
+color:#F5F5DC;
+ border-style: outset;
+    border-width: 2px;
+    border-radius: 10px;
+    font: bold 14px;
+padding: 5px</string>
+             </property>
              <property name="text">
               <string>Number of comparisons</string>
              </property>
@@ -158,6 +294,15 @@
            </item>
            <item row="0" column="3">
             <widget class="QPushButton" name="genRandInputBtn">
+             <property name="styleSheet">
+              <string notr="true">background-color: #808080;
+color:#F5F5DC;
+ border-style: outset;
+    border-width: 2px;
+    border-radius: 10px;
+    font: bold 14px;
+padding: 5px</string>
+             </property>
              <property name="text">
               <string>generateRandombtn</string>
              </property>
@@ -168,6 +313,15 @@
              <property name="enabled">
               <bool>false</bool>
              </property>
+             <property name="styleSheet">
+              <string notr="true">background-color: #808080;
+color:#F5F5DC;
+ border-style: outset;
+    border-width: 2px;
+    border-radius: 10px;
+    font: bold 14px;
+padding: 5px</string>
+             </property>
              <property name="text">
               <string>undoRemoveRow</string>
              </property>
@@ -175,6 +329,15 @@
            </item>
            <item row="1" column="1">
             <widget class="QPushButton" name="removeRowBtn">
+             <property name="styleSheet">
+              <string notr="true">background-color: #808080;
+color:#F5F5DC;
+ border-style: outset;
+    border-width: 2px;
+    border-radius: 10px;
+    font: bold 14px;
+padding: 5px</string>
+             </property>
              <property name="text">
               <string>removeRow</string>
              </property>
@@ -186,6 +349,15 @@
        </item>
        <item>
         <widget class="QPushButton" name="visualizebtn">
+         <property name="styleSheet">
+          <string notr="true">background-color: #808080;
+color:#F5F5DC;
+ border-style: outset;
+    border-width: 2px;
+    border-radius: 10px;
+    font: bold 14px;
+padding: 5px</string>
+         </property>
          <property name="text">
           <string>Visualize</string>
          </property>
@@ -193,6 +365,15 @@
        </item>
        <item>
         <widget class="QPushButton" name="btnrun">
+         <property name="styleSheet">
+          <string notr="true">background-color: #808080;
+color:#F5F5DC;
+ border-style: outset;
+    border-width: 2px;
+    border-radius: 10px;
+    font: bold 14px;
+padding: 5px</string>
+         </property>
          <property name="text">
           <string>Run algorithm</string>
          </property>
@@ -202,12 +383,21 @@
         <widget class="QPushButton" name="hidebtn">
          <property name="maximumSize">
           <size>
-           <width>100</width>
+           <width>114</width>
            <height>16777215</height>
           </size>
          </property>
          <property name="layoutDirection">
           <enum>Qt::RightToLeft</enum>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">background-color: #808080;
+color:#F5F5DC;
+ border-style: outset;
+    border-width: 2px;
+    border-radius: 10px;
+    font: bold 11px;
+padding: 5px</string>
          </property>
          <property name="text">
           <string>Hide visualization</string>
@@ -236,6 +426,15 @@
          </property>
          <property name="layoutDirection">
           <enum>Qt::RightToLeft</enum>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">background-color: #808080;
+color:#F5F5DC;
+ border-style: outset;
+    border-width: 2px;
+    border-radius: 10px;
+    font: bold 14px;
+padding: 5px</string>
          </property>
          <property name="text">
           <string>Exit</string>

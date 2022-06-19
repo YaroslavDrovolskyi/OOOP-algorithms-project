@@ -12,6 +12,15 @@
 #include "AlgoVisualizerObserver.h"
 #include "algorithmvisualizer.h"
 
+
+
+Facade::Facade(QWidget*parent):facadeInfo_(nullptr),algoCreator_(nullptr),
+                                    hasTime(false),hasNumberOfComparisons(false),
+                                    isAscend(true),inputLine(""),visualize(false),
+                                    m_parent(parent)
+{
+}
+
 /**!
   *     It is the main fnction in Facade class. It launch algo and create result-of-algo structure according
   *     to algo type and flags: hasTime, hasNumberOfComparisons
@@ -75,6 +84,11 @@
 
      }
 
+     void Facade::setVisualize(bool b)
+     {
+         this->visualize = b;
+     }
+
 //        void Facade::setAlgorithmVisualizer(baseVisualizerObserver*av)
 //        {
 //            this->m_algorithmvisualizer.reset(av);
@@ -106,15 +120,14 @@
         // this->algoCreator_ =std::make_shared<mergeSortCreator>( std::move(this->inputLine),this->currentComparator<float>);
         if(this->visualize)
           {
-//           this->setAlgorithmVisualizer(dynamic_cast<baseVisualizerObserver*>(new AlgorithmVisualizer<float>(
-//                                                                       this->m_frameinfo.heigth,
-//                                                                       this->m_frameinfo.width,
-//                                                                       this->m_frameinfo.frame_ptr)));
+
                 auto p =dynamic_cast<mergeSortCreator*>(this->algoCreator_.get());
-                p->setVisualizer(new AlgorithmVisualizer<float>(
+                p->setVisualizer(new AlgorithmVisualizer<float>(this->m_parent,
                                      this->m_frameinfo.heigth,
                                      this->m_frameinfo.width,
-                                     this->m_frameinfo.frame_ptr));
+                                     this->m_frameinfo.frame_ptr,
+                                     this->m_frameinfo.mut));
+
           }
          break;
      case(1):
@@ -122,42 +135,111 @@
  this->algoCreator_ =std::make_shared<quickSortCreator>( std::move(this->inputLine),this->comparatorAscend<float>);
          else
                this->algoCreator_ =std::make_shared<quickSortCreator>( std::move(this->inputLine),this->comparatorDescend<float>);
-        // this->algoCreator_ =std::make_shared<quickSortCreator>( std::move(this->inputLine),this->currentComparator<float>);
+         if(this->visualize)
+           {
+
+                 auto p =dynamic_cast<quickSortCreator*>(this->algoCreator_.get());
+
+                 p->setVisualizer(new AlgorithmVisualizer<float>(this->m_parent,
+                                      this->m_frameinfo.heigth,
+                                      this->m_frameinfo.width,
+                                      this->m_frameinfo.frame_ptr,
+                                      this->m_frameinfo.mut));
+
+           }
          break;
      case(2):
          if(this->isAscend)
  this->algoCreator_ =std::make_shared<heapSortCreator>( std::move(this->inputLine),this->comparatorAscend<float>);
          else
                this->algoCreator_ =std::make_shared<heapSortCreator>( std::move(this->inputLine),this->comparatorDescend<float>);
-        // this->algoCreator_ =std::make_shared<heapSortCreator>( std::move(this->inputLine),this->currentComparator<float>);
+         if(this->visualize)
+           {
+
+                 auto p =dynamic_cast<heapSortCreator*>(this->algoCreator_.get());
+
+                 p->setVisualizer(new AlgorithmVisualizer<float>(this->m_parent,
+                                      this->m_frameinfo.heigth,
+                                      this->m_frameinfo.width,
+                                      this->m_frameinfo.frame_ptr,
+                                      this->m_frameinfo.mut));
+
+           }
+
          break;
      case(3):
          if(this->isAscend)
  this->algoCreator_ =std::make_shared<countingSortCreator>( std::move(this->inputLine),this->comparatorAscend<uint32_t>);
          else
                this->algoCreator_ =std::make_shared<countingSortCreator>( std::move(this->inputLine),this->comparatorDescend<uint32_t>);
-       //  this->algoCreator_ =std::make_shared<countingSortCreator>( std::move(this->inputLine),this->currentComparator<uint32_t>);
+
+         if(this->visualize)
+           {
+
+                 auto p =dynamic_cast<countingSortCreator*>(this->algoCreator_.get());
+
+                 p->setVisualizer(new AlgorithmVisualizer<uint32_t>(this->m_parent,
+                                      this->m_frameinfo.heigth,
+                                      this->m_frameinfo.width,
+                                      this->m_frameinfo.frame_ptr,
+                                      this->m_frameinfo.mut));
+
+           }
+
+
          break;
      case(4):
          if(this->isAscend)
  this->algoCreator_ =std::make_shared<radixSortCreator>( std::move(this->inputLine),this->comparatorAscend<uint32_t>);
          else
                this->algoCreator_ =std::make_shared<radixSortCreator>( std::move(this->inputLine),this->comparatorDescend<uint32_t>);
-        // this->algoCreator_ =std::make_shared<radixSortCreator>( std::move(this->inputLine),this->currentComparator<uint32_t>);
+         if(this->visualize)
+           {
+
+                 auto p =dynamic_cast<radixSortCreator*>(this->algoCreator_.get());
+                 p->setVisualizer(new AlgorithmVisualizer<uint32_t>(this->m_parent,
+                                      this->m_frameinfo.heigth,
+                                      this->m_frameinfo.width,
+                                      this->m_frameinfo.frame_ptr,
+                                      this->m_frameinfo.mut));
+
+           }
          break;
      case(5):
          if(this->isAscend)
  this->algoCreator_ =std::make_shared<insertionSortCreator>( std::move(this->inputLine),this->comparatorAscend<float>);
          else
                this->algoCreator_ =std::make_shared<insertionSortCreator>( std::move(this->inputLine),this->comparatorDescend<float>);
-        // this->algoCreator_ =std::make_shared<insertionSortCreator>( std::move(this->inputLine),this->currentComparator<float>);
+         if(this->visualize)
+           {
+
+                 auto p =dynamic_cast<insertionSortCreator*>(this->algoCreator_.get());
+
+                 p->setVisualizer(new AlgorithmVisualizer<float>(this->m_parent,
+                                      this->m_frameinfo.heigth,
+                                      this->m_frameinfo.width,
+                                      this->m_frameinfo.frame_ptr,
+                                      this->m_frameinfo.mut));
+
+           }
          break;
      case(6):
          if(this->isAscend)
  this->algoCreator_ =std::make_shared<bucketSortCreator>( std::move(this->inputLine),this->comparatorAscend<float>);
          else
                this->algoCreator_ =std::make_shared<bucketSortCreator>( std::move(this->inputLine),this->comparatorDescend<float>);
-        // this->algoCreator_ =std::make_shared<bucketSortCreator>( std::move(this->inputLine),this->currentComparator<float>);
+         if(this->visualize)
+           {
+
+                 auto p =dynamic_cast<bucketSortCreator*>(this->algoCreator_.get());
+
+                 p->setVisualizer(new AlgorithmVisualizer<float>(this->m_parent,
+                                      this->m_frameinfo.heigth,
+                                      this->m_frameinfo.width,
+                                      this->m_frameinfo.frame_ptr,
+                                      this->m_frameinfo.mut));
+
+           }
          break;
      case(7):
  this->algoCreator_ =std::make_shared<horspoolCreator>( std::move(this->inputLine));
@@ -170,13 +252,36 @@
  this->algoCreator_ =std::make_shared<CombSortCreator>( std::move(this->inputLine),this->comparatorAscend<float>);
          else
                this->algoCreator_ =std::make_shared<CombSortCreator>( std::move(this->inputLine),this->comparatorDescend<float>);
+         if(this->visualize)
+           {
+
+                 auto p =dynamic_cast<CombSortCreator*>(this->algoCreator_.get());
+
+                 p->setVisualizer(new AlgorithmVisualizer<float>(this->m_parent,
+                                      this->m_frameinfo.heigth,
+                                      this->m_frameinfo.width,
+                                      this->m_frameinfo.frame_ptr,
+                                      this->m_frameinfo.mut));
+
+           }
          break;
      case(10):
          if(this->isAscend)
  this->algoCreator_ =std::make_shared<ShellSortCreator>( std::move(this->inputLine),this->comparatorAscend<float>);
          else
                this->algoCreator_ =std::make_shared<ShellSortCreator>( std::move(this->inputLine),this->comparatorDescend<float>);
+         if(this->visualize)
+           {
 
+                 auto p =dynamic_cast<ShellSortCreator*>(this->algoCreator_.get());
+
+                 p->setVisualizer(new AlgorithmVisualizer<float>(this->m_parent,
+                                      this->m_frameinfo.heigth,
+                                      this->m_frameinfo.width,
+                                      this->m_frameinfo.frame_ptr,
+                                      this->m_frameinfo.mut));
+
+           }
          break;
      case(11):
          if(this->isAscend)
@@ -184,13 +289,36 @@
          else
                this->algoCreator_ =std::make_shared<OddEvenSortCreator>( std::move(this->inputLine),this->comparatorDescend<float>);
 
+         if(this->visualize)
+           {
+
+                 auto p =dynamic_cast<OddEvenSortCreator*>(this->algoCreator_.get());
+
+                 p->setVisualizer(new AlgorithmVisualizer<float>(this->m_parent,
+                                      this->m_frameinfo.heigth,
+                                      this->m_frameinfo.width,
+                                      this->m_frameinfo.frame_ptr,
+                                      this->m_frameinfo.mut));
+
+           }
          break;
      case(12):
          if(this->isAscend)
  this->algoCreator_ =std::make_shared<CocktailShakerSortCreator>( std::move(this->inputLine),this->comparatorAscend<float>);
          else
                this->algoCreator_ =std::make_shared<CocktailShakerSortCreator>( std::move(this->inputLine),this->comparatorDescend<float>);
+         if(this->visualize)
+           {
 
+                 auto p =dynamic_cast<CocktailShakerSortCreator*>(this->algoCreator_.get());
+
+                 p->setVisualizer(new AlgorithmVisualizer<float>(this->m_parent,
+                                      this->m_frameinfo.heigth,
+                                      this->m_frameinfo.width,
+                                      this->m_frameinfo.frame_ptr,
+                                      this->m_frameinfo.mut));
+
+           }
          break;
 
      case(13):
@@ -198,7 +326,18 @@
  this->algoCreator_ =std::make_shared<TimSortCreator>( std::move(this->inputLine),this->comparatorAscend<float>);
          else
                this->algoCreator_ =std::make_shared<TimSortCreator>( std::move(this->inputLine),this->comparatorDescend<float>);
+         if(this->visualize)
+           {
 
+                 auto p =dynamic_cast<TimSortCreator*>(this->algoCreator_.get());
+
+                 p->setVisualizer(new AlgorithmVisualizer<float>(this->m_parent,
+                                      this->m_frameinfo.heigth,
+                                      this->m_frameinfo.width,
+                                      this->m_frameinfo.frame_ptr,
+                                      this->m_frameinfo.mut));
+
+           }
          break;
 
      }
@@ -304,12 +443,12 @@ void Facade::setIsAscend(bool b)
     this->isAscend = b;
 }
 
-Facade::visualizationFrameInfo::visualizationFrameInfo(size_t h,size_t w,QFrame*fr):
-                                        heigth(h),width(w),frame_ptr(fr)
+Facade::visualizerInfo::visualizerInfo(size_t h,size_t w,QFrame*fr,QMutex* m):
+                                        heigth(h),width(w),frame_ptr(fr),mut(m)
 {
 }
 
-void Facade::setFrameInfo(visualizationFrameInfo&& fr_inf)
+void Facade::setFrameInfo(visualizerInfo&& fr_inf)
 {
     this->m_frameinfo = fr_inf;
 }

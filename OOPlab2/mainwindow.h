@@ -17,7 +17,8 @@
 #include <QCloseEvent>
 #include "algorithmvisualizer.h"
 #include"memento.h"
-
+#include <QThread>
+#include <QMutex>
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -30,14 +31,18 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+signals:
+    void stopVisualizer();
+
+public slots:
+void acceptAlgoVisualizerSignal(QFrame* fr);
+
 private slots:
 
 
     void on_btnrun_clicked();
 
     void on_algoselector_currentIndexChanged(int index);
-
-
 
     void on_removeRowBtn_clicked();
 
@@ -52,6 +57,14 @@ private slots:
     void on_hidebtn_clicked();
 
 private:
+
+    void stopThread();
+
+    void saveInfoToFacade();
+
+    std::unique_ptr<QThread> qthread=nullptr;
+
+     QMutex m_mutex;
 
     void closeEvent (QCloseEvent *event) override;
 
@@ -107,10 +120,11 @@ private:
         }
 
 
-    algorithm* algorithm_;
+    //algorithm* algorithm_;
+     std::unique_ptr<algorithm>algorithm_;
 protected:
-    Facade* facade  ;
-
+    //Facade* facade  ;
+    std::unique_ptr<Facade>facade;
 
    // std::unique_ptr<algorithm> algorithm_ = nullptr;
 

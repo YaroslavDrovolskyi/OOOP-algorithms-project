@@ -10,6 +10,7 @@ CONFIG += c++11
 
 SOURCES += \
     SimplexResultVisualizer.cpp \
+    algorithmvisualizer.cpp \
     facadeinfo.cpp \
     factory.cpp \
     main.cpp \

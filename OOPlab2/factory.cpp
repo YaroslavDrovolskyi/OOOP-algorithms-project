@@ -32,12 +32,31 @@
     {
         return this->res;
     }
+
+    template<typename T,typename Comparator>
+   void sortingAlgoCreator<T,Comparator>::setVisualizer(AlgorithmVisualizer<T>* av)
+   {
+       this->m_algorithmvisualizer.reset(av);
+       dynamic_cast<sortingalgo<T,Comparator>*>( this->getAlgorithm())->setVisualizer(av);
+   }
+
+
+   template<typename T,typename Comparator>
+    sortingAlgoCreator<T,Comparator>::sortingAlgoCreator()
+   {
+       this->m_algorithmvisualizer = nullptr;
+   }
+
+
   mergeSortCreator::mergeSortCreator(QString&& line, bool a(float,float) )
   {
         qDebug()<<"mergeSortCreator";
+       // this->m_algorithmvisualizer = nullptr;
 
-      if(this->readLine(std::move(line)))
+      if(this->readLine(std::move(line))){
        mergesorting_ = mergesorting<float, bool(float,float)>::GetInstance(this->vec,a);
+        this->mergesorting_->setVisualizer(this->m_algorithmvisualizer.get());
+      }
   }
 
 
@@ -48,11 +67,6 @@
      return this->mergesorting_;
   }
 
-   void mergeSortCreator::setVisualizer(AlgorithmVisualizer<float>* av)
-   {
-       this->m_algorithmvisualizer.reset(av);
-       this->mergesorting_->setVisualizer(av);
-   }
 
  bool mergeSortCreator::readLine(QString&& line)
  {
@@ -103,8 +117,10 @@
  quickSortCreator::quickSortCreator(QString&& line, bool a(float,float) )
  {
 
-     if(this->readLine(std::move(line)))
+     if(this->readLine(std::move(line))){
       quicksorting_ = quicksorting<float, bool(float,float)>::GetInstance(this->vec,a);
+     this->quicksorting_->setVisualizer(this->m_algorithmvisualizer.get());
+     }
  }
  algorithm* quickSortCreator::getAlgorithm()
  {
@@ -160,8 +176,10 @@ void quickSortCreator::convertToQString()
 heapSortCreator::heapSortCreator(QString&& line, bool a(float,float) )
 {
 
-    if(this->readLine(std::move(line)))
+    if(this->readLine(std::move(line))){
      heapsorting_ = heapsorting<float, bool(float,float)>::GetInstance(this->vec,a);
+     this->heapsorting_->setVisualizer(this->m_algorithmvisualizer.get());
+    }
 }
 algorithm* heapSortCreator::getAlgorithm()
 {
@@ -218,8 +236,10 @@ void heapSortCreator::convertToQString()
 countingSortCreator::countingSortCreator(QString&& line, bool a(uint32_t,uint32_t) )
 {
 
-    if(this->readLine(std::move(line)))
+    if(this->readLine(std::move(line))){
      countingsorting_ = countingsorting<uint32_t, bool(uint32_t,uint32_t)>::GetInstance(this->vec,a);
+     this->countingsorting_->setVisualizer(this->m_algorithmvisualizer.get());
+    }
 }
 algorithm* countingSortCreator::getAlgorithm()
 {
@@ -276,8 +296,10 @@ void countingSortCreator::convertToQString()
 radixSortCreator::radixSortCreator(QString&& line, bool a(uint32_t,uint32_t) )
 {
 
-    if(this->readLine(std::move(line)))
+    if(this->readLine(std::move(line))){
      radixsorting_ = radixsorting<uint32_t, bool(uint32_t,uint32_t)>::GetInstance(this->vec,a);
+     this->radixsorting_->setVisualizer(this->m_algorithmvisualizer.get());
+    }
 }
 algorithm* radixSortCreator::getAlgorithm()
 {
@@ -391,8 +413,10 @@ void insertionSortCreator::convertToQString()
 bucketSortCreator::bucketSortCreator(QString&& line, bool a(float,float) )
 {
 
-    if(this->readLine(std::move(line)))
+    if(this->readLine(std::move(line))){
      bucketsorting_ = bucketsorting<float, bool(float,float)>::GetInstance(this->vec,a);
+      this->bucketsorting_->setVisualizer(this->m_algorithmvisualizer.get());
+    }
 }
 algorithm* bucketSortCreator::getAlgorithm()
 {
@@ -447,8 +471,10 @@ void bucketSortCreator::convertToQString()
 CombSortCreator::CombSortCreator(QString&& line, bool a(float,float) )
 {
 
-    if(this->readLine(std::move(line)))
+    if(this->readLine(std::move(line))){
      CombSort_ = CombSort<float, bool(float,float)>::GetInstance(this->vec,a);
+    this->CombSort_->setVisualizer(this->m_algorithmvisualizer.get());
+    }
 }
 algorithm* CombSortCreator::getAlgorithm()
 {
@@ -507,8 +533,10 @@ void CombSortCreator::convertToQString()
 CocktailShakerSortCreator::CocktailShakerSortCreator(QString&& line, bool a(float,float) )
 {
 
-    if(this->readLine(std::move(line)))
+    if(this->readLine(std::move(line))){
      CocktailShakerSort_ = CocktailShakerSort<float, bool(float,float)>::GetInstance(this->vec,a);
+     this->CocktailShakerSort_->setVisualizer(this->m_algorithmvisualizer.get());
+    }
 }
 algorithm* CocktailShakerSortCreator::getAlgorithm()
 {
@@ -567,8 +595,10 @@ void CocktailShakerSortCreator::convertToQString()
 ShellSortCreator::ShellSortCreator(QString&& line, bool a(float,float) )
 {
 
-    if(this->readLine(std::move(line)))
+    if(this->readLine(std::move(line))){
      ShellSort_ = ShellSort<float, bool(float,float)>::GetInstance(this->vec,a);
+    this->ShellSort_->setVisualizer(this->m_algorithmvisualizer.get());
+   }
 }
 algorithm* ShellSortCreator::getAlgorithm()
 {
@@ -626,8 +656,10 @@ void ShellSortCreator::convertToQString()
 OddEvenSortCreator::OddEvenSortCreator(QString&& line, bool a(float,float) )
 {
 
-    if(this->readLine(std::move(line)))
+    if(this->readLine(std::move(line))){
      OddEvenSort_ = OddEvenSort<float, bool(float,float)>::GetInstance(this->vec,a);
+    this->OddEvenSort_->setVisualizer(this->m_algorithmvisualizer.get());
+   }
 }
 algorithm* OddEvenSortCreator::getAlgorithm()
 {
@@ -684,8 +716,10 @@ void OddEvenSortCreator::convertToQString()
 TimSortCreator::TimSortCreator(QString&& line, bool a(float,float) )
 {
 
-    if(this->readLine(std::move(line)))
+    if(this->readLine(std::move(line))){
      TimSort_ = TimSort<float, bool(float,float)>::GetInstance(this->vec,a);
+    this->TimSort_->setVisualizer(this->m_algorithmvisualizer.get());
+   }
 }
 algorithm* TimSortCreator::getAlgorithm()
 {

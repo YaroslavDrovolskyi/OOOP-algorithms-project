@@ -38,7 +38,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->resultTable->setColumnCount(4);
     ui->resultTable->setHorizontalHeaderLabels(colnames);
 
-    facade = new Facade();
+    facade.reset(new Facade(this));
 
     results_table_originator = ResultTableOriginator(ui->resultTable);
     results_history = ResultTableHistory(&results_table_originator);
@@ -49,10 +49,6 @@ MainWindow::MainWindow(QWidget *parent)
     //hide unused widgets
     ui->visualizationFrame->hide();
     ui->hidebtn->hide();
-
-
-
-
 
 }
 
@@ -75,6 +71,40 @@ MainWindow::~MainWindow()
  };
 
 
+ void MainWindow::saveInfoToFacade()
+ {
+
+
+
+
+     size_t height = this->ui->resultTable->height();
+      size_t width = this->ui->resultTable->width();
+      Facade::visualizerInfo fr_inf(height,width,ui->visualizationFrame,&this->m_mutex);
+
+     this->facade->setFrameInfo(std::move(fr_inf));
+
+      this->facade->setInputLine(this->ui->inputline->text());
+
+      facade->setVisualize(false);
+
+     if(ui->radioDescend->isChecked())
+         this->facade->setIsAscend(false);
+     else
+         this->facade->setIsAscend(true);
+     if(ui->checkBoxMemory->isChecked())
+         this->facade->setNumberOfComparisons(true);
+     else
+         this->facade->setNumberOfComparisons(false);
+     if(ui->checkBoxTime->isChecked())
+         this->facade->setTime(true);
+     else
+          this->facade->setTime(false);
+
+
+ }
+
+
+
 /**!
   *    Handler of clicking Run button
   *    It initialize facade with input data, launch facade, and display algo results in results table
@@ -83,24 +113,9 @@ MainWindow::~MainWindow()
 void MainWindow::on_btnrun_clicked()
 {
 
+      on_hidebtn_clicked();
+      saveInfoToFacade();
 
-    //12 45 12 7 34 7 23 78 45 233235 653 3231 4 12 12 12 3 12
-
-    // "ilove bee drinkingbee beer"   "beer"
-
-        this->facade->setInputLine(this->ui->inputline->text());
-    if(ui->radioDescend->isChecked())
-        this->facade->setIsAscend(false);
-    else
-        this->facade->setIsAscend(true);
-    if(ui->checkBoxMemory->isChecked())
-        this->facade->setNumberOfComparisons(true);
-    else
-        this->facade->setNumberOfComparisons(false);
-    if(ui->checkBoxTime->isChecked())
-        this->facade->setTime(true);
-    else
-         this->facade->setTime(false);
 
       try {
           this->facade->runAlgo(this->ui->algoselector->currentIndex());
@@ -330,44 +345,95 @@ void MainWindow::closeEvent (QCloseEvent *event)
 
 void MainWindow::on_exitbtn_clicked()
 {
+    stopThread();
     QWidget* par = qobject_cast<QWidget*>(this->parent());
     par->show();
     this->close();
 }
 
+void MainWindow::stopThread()
+{
+    if(!qthread || !qthread->isRunning())
+    return;
+
+    while(!m_mutex.tryLock());
+
+    emit stopVisualizer();
+
+    qthread->quit();
+    qthread->wait();
+  //  delete qthread;
+    qthread.reset(nullptr);
+    //qthread = nullptr;
+    facade->moveToThread(this->thread());
+
+    m_mutex.unlock();
+
+}
 
 void MainWindow::on_visualizebtn_clicked()
 {
-    ui->resultTable->hide();
+    if(!qthread )
+       {
 
+        saveInfoToFacade();
+
+    facade->setVisualize(true);
+    ui->resultTable->hide();
     ui->visualizationFrame->show();
     ui->hidebtn->show();
 
-    size_t height = this->ui->resultTable->height();
-     size_t width = this->ui->resultTable->width();
-     Facade::visualizationFrameInfo fr_inf(height,width,ui->visualizationFrame);
+    if(!this->ui->visualizationFrame->layout())
+    {
+        auto layout = new QHBoxLayout();
+        layout->setDirection(QHBoxLayout::Direction::RightToLeft);
+        this->ui->visualizationFrame->setLayout(layout);
+    }else
+    {
+        int i=0;
+        while(this->ui->visualizationFrame->layout()->itemAt(i)){
+            auto item = this->ui->visualizationFrame->layout()->itemAt(i);
+            delete item->widget();
+         this->ui->visualizationFrame->layout()->removeItem(item);
+       }
+    }
 
-    this->facade->setFrameInfo(std::move(fr_inf));
-
-//    if(this->ui->visualizationFrame->layout())
-//    {
-
-//    delete this->ui->visualizationFrame->layout();
-//    this->ui->visualizationFrame->setLayout(nullptr);
-
-//    }
-
-    //if(!this->facade->getAlgorithmVisualizer())
-   // {
-
-   // }
-    on_btnrun_clicked();
+      //qthread = new QThread(this);
+     qthread = std::make_unique<QThread>(new QThread(this));
+      this->facade->setInputLine(this->ui->inputline->text());
+      facade->moveToThread(qthread.get());
+      qthread->start();
+      QMetaObject::invokeMethod(facade.get(), "runAlgo", Qt::QueuedConnection,Q_ARG(int,this->ui->algoselector->currentIndex()));
 
 
+    }
+    else
+    {
+
+            stopThread();
+            this->on_visualizebtn_clicked();
+
+
+    }
 
 }
+
+void MainWindow::acceptAlgoVisualizerSignal(QFrame* fr)
+{
+    QFrame* frame = new QFrame;
+
+    frame->setStyleSheet(fr->styleSheet());
+    frame->setFixedHeight(fr->geometry().height());
+    frame->setFixedWidth(fr->geometry().width());
+
+    this->ui->visualizationFrame->layout()->addWidget(frame);
+
+    this->ui->visualizationFrame->layout()->setAlignment(frame, Qt::AlignBottom );
+}
+
 void MainWindow::on_hidebtn_clicked()
 {
+    stopThread();
     ui->resultTable->show();
     ui->visualizationFrame->hide();
     ui->hidebtn->hide();

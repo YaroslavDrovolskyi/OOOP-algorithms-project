@@ -36,8 +36,17 @@ protected:
     QString res;
 };
 
+template<typename T,typename Comparator>
+class sortingAlgoCreator: public algoCreator
+{
+public:
+    sortingAlgoCreator();
+    virtual void setVisualizer(AlgorithmVisualizer<T>*);
+protected:
+ std::unique_ptr<AlgorithmVisualizer<T>> m_algorithmvisualizer;
+};
 
-class mergeSortCreator : public algoCreator
+class mergeSortCreator : public sortingAlgoCreator<float,bool(float,float)>
 {
 public:
     mergeSortCreator(QString&&, bool(float,float));
@@ -49,16 +58,16 @@ public:
          delete this->mergesorting_;
         this->mergesorting_ = nullptr;
     }
-    void setVisualizer(AlgorithmVisualizer<float>*);
+
 private:
     void convertToQString() override;
     bool readLine(QString&&) override;
     std::vector<float> vec;
-    std::unique_ptr<AlgorithmVisualizer<float>> m_algorithmvisualizer;
+   // std::unique_ptr<AlgorithmVisualizer<float>> m_algorithmvisualizer;
     mergesorting<float,bool(float,float)>*mergesorting_;
 };
 
-class quickSortCreator : public algoCreator
+class quickSortCreator : public sortingAlgoCreator<float,bool(float,float)>
 {
 public:
     quickSortCreator(QString&&, bool(float,float));
@@ -80,7 +89,7 @@ private:
 };
 
 
-class heapSortCreator : public algoCreator
+class heapSortCreator : public sortingAlgoCreator<float,bool(float,float)>
 {
 public:
     heapSortCreator(QString&&, bool(float,float));
@@ -101,7 +110,7 @@ private:
     heapsorting<float,bool(float,float)>*heapsorting_;
 };
 
-class countingSortCreator : public algoCreator
+class countingSortCreator : public sortingAlgoCreator<uint32_t,bool(uint32_t,uint32_t)>
 {
 public:
     countingSortCreator(QString&&, bool(uint32_t,uint32_t));
@@ -122,7 +131,7 @@ private:
     countingsorting<uint32_t,bool(uint32_t,uint32_t)>*countingsorting_;
 };
 
-class radixSortCreator : public algoCreator
+class radixSortCreator :public sortingAlgoCreator<uint32_t,bool(uint32_t,uint32_t)>
 {
 public:
     radixSortCreator(QString&&, bool(uint32_t,uint32_t));
@@ -144,7 +153,7 @@ private:
 };
 
 
-class insertionSortCreator : public algoCreator
+class insertionSortCreator : public sortingAlgoCreator<float,bool(float,float)>
 {
 public:
     insertionSortCreator(QString&&, bool(float,float));
@@ -165,7 +174,7 @@ private:
     insertionsorting<float,bool(float,float)>*insertionsorting_;
 };
 
-class bucketSortCreator : public algoCreator
+class bucketSortCreator : public sortingAlgoCreator<float,bool(float,float)>
 {
 public:
     bucketSortCreator(QString&&, bool(float,float));
@@ -230,7 +239,7 @@ private:
     boyermoor* boyermoor_;
 };
 
-class CombSortCreator : public algoCreator
+class CombSortCreator : public sortingAlgoCreator<float,bool(float,float)>
 {
 public:
     CombSortCreator(QString&&, bool(float,float));
@@ -250,7 +259,7 @@ private:
     CombSort<float,bool(float,float)>*CombSort_;
 };
 
-class ShellSortCreator : public algoCreator
+class ShellSortCreator : public sortingAlgoCreator<float,bool(float,float)>
 {
 public:
     ShellSortCreator(QString&&, bool(float,float));
@@ -270,7 +279,7 @@ private:
     ShellSort<float,bool(float,float)>*ShellSort_;
 };
 
-class OddEvenSortCreator : public algoCreator
+class OddEvenSortCreator : public sortingAlgoCreator<float,bool(float,float)>
 {
 public:
     OddEvenSortCreator(QString&&, bool(float,float));
@@ -290,7 +299,7 @@ private:
     OddEvenSort<float,bool(float,float)>*OddEvenSort_;
 };
 
-class CocktailShakerSortCreator : public algoCreator
+class CocktailShakerSortCreator : public sortingAlgoCreator<float,bool(float,float)>
 {
 public:
     CocktailShakerSortCreator(QString&&, bool(float,float));
@@ -310,7 +319,7 @@ private:
     CocktailShakerSort<float,bool(float,float)>*CocktailShakerSort_;
 };
 
-class TimSortCreator : public algoCreator
+class TimSortCreator : public sortingAlgoCreator<float,bool(float,float)>
 {
 public:
     TimSortCreator(QString&&, bool(float,float));

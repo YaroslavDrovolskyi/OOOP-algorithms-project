@@ -25,7 +25,7 @@ void MainMenu::on_sortingbtn_clicked()
     hide();
   mainWindow = new MainWindow(this);
     mainWindow->show();
-
+    qDebug()<<"SHOWING MAIN WINDOW";
 }
 
 

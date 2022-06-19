@@ -46,6 +46,10 @@ public:
 
    void setVisualizer( visualizerObserver<T>*);
 
+ // virtual void swap(std::vector<T>&vec, size_t i, size_t j);
+
+   template<class _Buff>
+   void swap(_Buff&vec, size_t i, size_t j);
 
    virtual ~sortingalgo();
 
@@ -417,21 +421,21 @@ void print(T* arr, std::size_t size) {
 
 
 template<typename T, typename Comparator>
-class ALGOSLIB_EXPORT SortArrayAlgo:  public algorithm
+class ALGOSLIB_EXPORT SortArrayAlgo:  public sortingalgo<T,Comparator>
 {
 public:
 
     SortArrayAlgo() = default;
 
-   virtual std::string gettype() override;
+   // virtual std::string gettype() override;
    virtual T* getArray() const = 0;
    virtual std::size_t getArraySize() const = 0;
    virtual ~SortArrayAlgo() = default;
 
-protected:
-    std::function<Comparator> comparator;
-private:
-   std::string type;
+//protected:
+//    std::function<Comparator> comparator;
+//private:
+//   std::string type;
 };
 
 

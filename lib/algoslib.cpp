@@ -29,6 +29,35 @@ void sortingalgo<T,Comparator>::setVisualizer( visualizerObserver<T>* v)
     this->m_visualizer = v;
 }
 
+//template<typename T, typename Comparator>
+//void sortingalgo<T,Comparator>::swap(std::vector<T>&vec, size_t i, size_t j)
+//{
+//    if(this->m_visualizer)
+//     {
+//        this->m_visualizer->highlight(i,j,this->m_visualizer->getColor(baseVisualizerObserver::Colors::YELLOW));
+
+//        this->m_visualizer->swap(i,j);
+//    }
+//    T temp = vec[i];
+//    vec[i] = vec[j];
+//    vec[j] = temp;
+
+//}
+template<typename T, typename Comparator>
+template<typename _Buff>
+void sortingalgo<T,Comparator>::swap(_Buff&vec, size_t i, size_t j)
+{
+    if(this->m_visualizer)
+     {
+        this->m_visualizer->highlight(i,j,this->m_visualizer->getColor(baseVisualizerObserver::Colors::YELLOW));
+
+        this->m_visualizer->swap(i,j);
+    }
+    T temp = vec[i];
+    vec[i] = vec[j];
+    vec[j] = temp;
+}
+
 
  substringmatching::substringmatching() { this->type = "substringmatching"; };
 
@@ -48,8 +77,11 @@ std::string substringmatching::gettype()
 template<typename T,  typename Comparator>
 void mergesorting<T,Comparator>::merge(std::vector<T>& arr, int p, int mid, int r)
 {
-
+   if(this->m_visualizer){
+       if(this->m_visualizer->isStopped())
+           return;
    this->m_visualizer->highlight(p,r,this->m_visualizer->getColor(baseVisualizerObserver::Colors::YELLOW));
+   }
 
     std::vector<T>left(mid - p + 1);
     std::vector<T>right(r - mid);
@@ -92,6 +124,7 @@ void mergesorting<T,Comparator>::merge(std::vector<T>& arr, int p, int mid, int 
         rightindex++;
         arrindex++;
     }
+    if(this->m_visualizer)
     this->m_visualizer->reReadVector(arr,p, r);
 }
 template<typename T,  typename Comparator>
@@ -118,6 +151,11 @@ void mergesorting<T,Comparator>::mergesort(std::vector<T>& arr, int p, int r)
 {
     if (p < r)
     {
+        if(this->m_visualizer)
+        {
+            if(this->m_visualizer->isStopped())
+                return;
+        }
         int mid = (p + r) / 2;
         mergesort(arr, p, mid);
         mergesort(arr, mid + 1, r);
@@ -131,7 +169,12 @@ void mergesorting<T,Comparator>::run()
     int len = this->vec.size();
 
     if(this->m_visualizer)
+    {
+
+      if(this->m_visualizer->isStopped())
+         return;
         this->m_visualizer->readVector(this->vec);
+    }
 
     this->mergesort(this->vec, p, len - 1);
 
@@ -222,17 +265,33 @@ int quicksorting<T,Comparator>::partition(std::vector<T>& arr, int p, int r)
     int i = p - 1;
     for (int j = p; j < r; j++)
     {
+        if(this->m_visualizer){
+            if(this->m_visualizer->isStopped())
+                return -1;
+
+        }
         if (/*arr[j] <= arr[r]*/ this->comparator(arr[j],arr[r]) )
         {
             i++;
-            float temp = arr[j];
-            arr[j] = arr[i];
-            arr[i] = temp;
+//            if(this->m_visualizer){
+//            this->m_visualizer->highlight(i,j,this->m_visualizer->getColor(baseVisualizerObserver::Colors::YELLOW));
+
+
+//            }
+                //            float temp = arr[j];
+//            arr[j] = arr[i];
+//            arr[i] = temp;
+            this->swap(this->vec,i,j);
         }
     }
-    T temp = arr[r];
-    arr[r] = arr[i + 1];
-    arr[i + 1] = temp;
+//    T temp = arr[r];
+//    arr[r] = arr[i + 1];
+//    arr[i + 1] = temp;
+//    if(this->m_visualizer)
+//    {
+//    this->m_visualizer->highlight(i+1,r,this->m_visualizer->getColor(baseVisualizerObserver::Colors::YELLOW));
+//    }
+    this->swap(this->vec,r,i+1);
     return i + 1;
 }
 
@@ -241,7 +300,13 @@ void quicksorting<T,Comparator>::quicksort(std::vector<T>& arr, int p, int r)
 {
     if (p < r)
     {
+        if(this->m_visualizer){
+            if(this->m_visualizer->isStopped())
+                return;
+        }
         int q = partition(arr, p, r);
+        if(q==-1)
+            return;
         quicksort(arr, p, q - 1);
         quicksort(arr, q + 1, r);
     }
@@ -265,6 +330,13 @@ void quicksorting<T,Comparator>::run()
 {
     int p = 0;
     int len = this->vec.size();
+    if(this->m_visualizer)
+    {
+
+      if(this->m_visualizer->isStopped())
+         return;
+        this->m_visualizer->readVector(this->vec);
+    }
    // this->quicksort(this->vec, p, len - 1);
     this->quicksort(this->vec,p,len-1);
 
@@ -336,6 +408,13 @@ void heapsorting<T,Comparator>::run()
 {
 
    // this->heapsort(this->vec);
+    if(this->m_visualizer)
+    {
+
+      if(this->m_visualizer->isStopped())
+         return;
+        this->m_visualizer->readVector(this->vec);
+    }
     this->heapsort(this->vec);
 
 }
@@ -347,6 +426,13 @@ std::vector<T> heapsorting<T,Comparator>::getvalues()
 template<typename T,  typename Comparator>
 void heapsorting<T,Comparator>::maxheapify(std::vector<T>& arr, int i, int p)
 {
+    if(this->m_visualizer)
+    {
+
+      if(this->m_visualizer->isStopped())
+         return;
+
+    }
     int left = i * 2 + 1;
     int right = i * 2 + 2;
     int max = i;
@@ -359,9 +445,15 @@ void heapsorting<T,Comparator>::maxheapify(std::vector<T>& arr, int i, int p)
 
     if (max != i)
     {
-        T temp = arr[i];
-        arr[i] = arr[max];
-        arr[max] = temp;
+//        T temp = arr[i];
+//        arr[i] = arr[max];
+//        arr[max] = temp;
+//        if(this->m_visualizer)
+//        {
+//        this->m_visualizer->highlight(i,max,this->m_visualizer->getColor(baseVisualizerObserver::Colors::YELLOW));
+
+//        }
+        this->swap(this->vec,i,max);
         maxheapify(arr, max, p);
     }
 }
@@ -374,6 +466,11 @@ void heapsorting<T,Comparator>::buildmaxheap(std::vector<T>& arr, int& p)
         maxheapify(arr, i, p);
     }
 }
+
+//if(this->m_visualizer){
+//if(this->m_visualizer->isStopped())
+//    return;
+//}
 template<typename T,  typename Comparator>
 void heapsorting<T,Comparator>::heapsort(std::vector<T>& arr)
 {
@@ -382,9 +479,16 @@ void heapsorting<T,Comparator>::heapsort(std::vector<T>& arr)
     buildmaxheap(arr, p);
     for (int i = size - 1; i >= 1; i--)
     {
-        T temp = arr[0];
-        arr[0] = arr[i];
-        arr[i] = temp;
+//        T temp = arr[0];
+//        arr[0] = arr[i];
+//        arr[i] = temp;
+//        if(this->m_visualizer)
+//        {
+//        this->m_visualizer->highlight(0,i,this->m_visualizer->getColor(baseVisualizerObserver::Colors::YELLOW));
+
+//        }
+         this->swap(this->vec,0,i);
+
         p--;
         maxheapify(arr, 0, p);
     }
@@ -458,6 +562,13 @@ countingsorting<T,Comparator>::~countingsorting()
 template<typename T,  typename Comparator>
 void countingsorting<T,Comparator>::countingsort(std::vector<T>& arr, uint32_t exp, uint32_t b)
 {
+    if(this->m_visualizer)
+    {
+
+      if(this->m_visualizer->isStopped())
+         return;
+
+    }
     int size = arr.size();
     std::vector<int>count(b, 0);
     //int out[size]{0};
@@ -480,11 +591,12 @@ void countingsorting<T,Comparator>::countingsort(std::vector<T>& arr, uint32_t e
     {
         arr[i] = out[i];
     }
-//    else
-//        for (int i = 0; i < size; i++)
-//        {
-//            arr[i] = out[size - i -1];
-//        }
+    if(this->m_visualizer)
+    {
+
+       this->m_visualizer->reReadVector(arr,0, size-1);
+
+    }
 
 
 }
@@ -502,8 +614,15 @@ template<typename T,  typename Comparator>
 void countingsorting<T,Comparator>::run()
 {
    // this->countingsort(this->vec,this->expon, this->base);
+    if(this->m_visualizer)
+    {
 
+      if(this->m_visualizer->isStopped())
+         return;
+        this->m_visualizer->readVector(this->vec);
+    }
    this->countingsort(this->vec,this->expon,this->base);
+
 }
 template<typename T,  typename Comparator>
 void countingsorting<T,Comparator>::setbase(uint32_t b)
@@ -561,12 +680,21 @@ template<typename T,  typename Comparator>
      countingsorting<T,Comparator>* cs =  countingsorting<T,Comparator>::GetInstance(arr,this->comparator);
 
      cs->setbase(b);
+     //cs->setVisualizer(this->m_visualizer);
      for (int exp = 1; max / exp > 0; exp *= b)
      {
+         if(this->m_visualizer)
+         {
 
+           if(this->m_visualizer->isStopped())
+              return;
+
+         }
          cs->setexp(exp);
          cs->run();
 
+         if(this->m_visualizer)
+         this->m_visualizer->reReadVector(cs->getvalues(),0, arr.size()-1);
      }
      this->vec = cs->getvalues();
      delete cs;
@@ -643,6 +771,13 @@ template<typename T,  typename Comparator>
 void radixsorting<T,Comparator>::run()
 {
    // this->radixsort(this->vec, this->base);
+    if(this->m_visualizer)
+    {
+
+      if(this->m_visualizer->isStopped())
+         return;
+        this->m_visualizer->readVector(this->vec);
+    }
     this->radixsort(this->vec,this->base);
 }
 template<typename T,  typename Comparator>
@@ -730,6 +865,13 @@ template<typename T,  typename Comparator>
 void insertionsorting<T,Comparator>::run()
 {
    // this->insertionsort(this->vec);
+    if(this->m_visualizer)
+    {
+
+      if(this->m_visualizer->isStopped())
+         return;
+        this->m_visualizer->readVector(this->vec);
+    }
     this->insertionsort(this->vec);
 
 }
@@ -745,12 +887,38 @@ void insertionsorting<T,Comparator>::insertionsort(std::vector<T>&arr)
     {
         k = arr[i];
         j = i - 1;
+
+        if(this->m_visualizer){
+            if(this->m_visualizer->isStopped())
+                return;
+        this->m_visualizer->highlight(i,j,this->m_visualizer->getColor(baseVisualizerObserver::Colors::YELLOW));
+        }
+
         while (j >= 0 && /*arr[j] > k*/ !this->comparator(arr[j],k))
         {
+            if(this->m_visualizer){
+                if(this->m_visualizer->isStopped())
+                    return;
+            this->m_visualizer->highlight(i,j,this->m_visualizer->getColor(baseVisualizerObserver::Colors::YELLOW));
+            }
             arr[j + 1] = arr[j];
             j = j - 1;
+            if(this->m_visualizer)
+            {
+
+              if(this->m_visualizer->isStopped())
+                 return;
+                this->m_visualizer->reReadVector(this->vec,j+2,j+2);
+            }
         }
         arr[j + 1] = k;
+        if(this->m_visualizer)
+        {
+
+          if(this->m_visualizer->isStopped())
+             return;
+            this->m_visualizer->reReadVector(this->vec,j+1,j+1);
+        }
     }
 }
 template<typename T,  typename Comparator>
@@ -794,14 +962,24 @@ void bucketsorting<T,Comparator>::bucketsort(std::vector<T>& arr)
     }
 
     insertionsorting<T,Comparator>* inss = insertionsorting<T,Comparator>::GetInstance(out[0],this->comparator);         //check
+    inss->setVisualizer(this->m_visualizer);//del
+
     for (int i = 0; i < len; i++)
     {
+        if(this->m_visualizer && this->m_visualizer->isStopped() )
+            {
+              delete inss;
+              return;
+            }
+        this->m_visualizer->clearFrame();//del
         inss->setvalues(out[i]);
         inss->run();
         out[i] = inss->getvalues();
     }
 delete inss;
     int k = 0;
+
+    this->m_visualizer->clearFrame();//del
     if(this->comparator(1,2)) //checking order of sorting
     for (int i = 0; i < len; i++)
     {
@@ -823,7 +1001,13 @@ delete inss;
             }
         }
 
+    if(this->m_visualizer)//del
+        {
 
+          if(this->m_visualizer->isStopped())
+             return;
+            this->m_visualizer->readVector(this->vec);
+        }
 }
 
 template<typename T,  typename Comparator>
@@ -1110,11 +1294,11 @@ uint32_t boyermoor::getmemory()
 #include <cassert>
 //#include "SortingAlgorithms.h"
 
-template<typename T, typename Comparator>
-std::string SortArrayAlgo<T, Comparator>::gettype()
-{
-    return this->type;
-}
+//template<typename T, typename Comparator>
+//std::string SortArrayAlgo<T, Comparator>::gettype()
+//{
+//    return this->type;
+//}
 
 /* CombSort */
 template <typename T, typename Comparator>
@@ -1163,6 +1347,13 @@ void CombSort<T, Comparator>::run(){
     if (size <= 1){
         return;
     }
+    if(this->m_visualizer)
+        {
+
+          if(this->m_visualizer->isStopped())
+             return;
+            this->m_visualizer->readVector(std::vector<T>(arr,arr+size));
+        }
     this->sort(arr, size);
 }
 
@@ -1209,8 +1400,14 @@ void CombSort<T, Comparator>::sort(T* arr, std::size_t size) {
 
         // one pass over array
         for (std::size_t i = 0; i + comparing_distance < size; i++) {
+            if(this->m_visualizer){
+                            if(this->m_visualizer->isStopped())
+                                return;
+                        this->m_visualizer->highlight(i,i+comparing_distance,this->m_visualizer->getColor(baseVisualizerObserver::Colors::YELLOW));
+                        }
             if (!this->comparator(arr[i], arr[i + comparing_distance])) { // if not in correct order
-                std::swap(arr[i], arr[i + comparing_distance]);
+               // std::swap(arr[i], arr[i + comparing_distance]);
+                this->swap(this->arr,i,i+comparing_distance);
                 is_sorted = false;
             }
         }
@@ -1263,6 +1460,13 @@ void ShellSort<T, Comparator>::run(){
     if (size <= 1){
         return;
     }
+    if(this->m_visualizer)
+        {
+
+          if(this->m_visualizer->isStopped())
+             return;
+            this->m_visualizer->readVector(std::vector<T>(arr,arr+size));
+        }
     this->sort(arr, size);
 }
 
@@ -1305,9 +1509,21 @@ void ShellSort<T, Comparator>::sort(T* arr, std::size_t size) {
                     //choose place to insert
                     int j = i;
                     for (; j >= gap && !this->comparator(arr[j - gap], temp); j-=gap) {
+                        if(this->m_visualizer)
+                        {
+                           if(this->m_visualizer->isStopped())
+                           return;
+                          this->m_visualizer->highlight(j,j-gap,this->m_visualizer->getColor(baseVisualizerObserver::Colors::YELLOW));
+                        }
                         arr[j] = arr[j - gap];
+
+                        if(this->m_visualizer)
+                        this->m_visualizer->reReadVector(std::vector<T>(arr,arr+size),j,j);
+
                     }
                     arr[j] = temp;
+                    if(this->m_visualizer)
+                    this->m_visualizer->reReadVector(std::vector<T>(arr,arr+size),j,j);
                 }
 
             }
@@ -1391,6 +1607,13 @@ void OddEvenSort<T, Comparator>::run(){
     if (size <= 1){
         return;
     }
+    if(this->m_visualizer)
+        {
+
+          if(this->m_visualizer->isStopped())
+             return;
+            this->m_visualizer->readVector(std::vector<T>(arr,arr+size));
+        }
     this->sort(arr, size);
 }
 
@@ -1427,16 +1650,24 @@ void OddEvenSort<T, Comparator>::sort(T* arr, std::size_t size) {
 
         // odd pass
         for (std::size_t i = 1; i < size - 1; i += 2) {
+            if(this->m_visualizer &&this->m_visualizer->isStopped() )
+               return;
             if (!this->comparator(arr[i], arr[i + 1])) {
-                std::swap(arr[i], arr[i + 1]);
+              //  std::swap(arr[i], arr[i + 1]);
+                this->swap(arr,i,i+1);
                 is_sorted = false;
             }
         }
 
         // even pass
         for (std::size_t i = 0; i < size - 1; i += 2) {
+            if(this->m_visualizer &&this->m_visualizer->isStopped() )
+               return;
+
+
             if (!this->comparator(arr[i], arr[i + 1])) {
-                std::swap(arr[i], arr[i + 1]);
+                //std::swap(arr[i], arr[i + 1]);
+                this->swap(arr,i,i+1);
                 is_sorted = false;
             }
         }
@@ -1491,6 +1722,13 @@ void CocktailShakerSort<T, Comparator>::run(){
     if (size <= 1){
         return;
     }
+    if(this->m_visualizer)
+            {
+
+              if(this->m_visualizer->isStopped())
+                 return;
+                this->m_visualizer->readVector(std::vector<T>(arr,arr+size));
+            }
     this->sort(arr, size);
 }
 
@@ -1522,8 +1760,11 @@ void CocktailShakerSort<T, Comparator>::sort(T* arr, std::size_t size) {
     while (!is_sorted) {
         is_sorted = true;
         for (std::size_t i = 0; i < size - 1; i++) {
+            if(this->m_visualizer &&this->m_visualizer->isStopped() )
+                return;
             if (!this->comparator(arr[i], arr[i + 1])) {
-                std::swap(arr[i], arr[i + 1]);
+                //std::swap(arr[i], arr[i + 1]);
+                 this->swap(arr,i,i+1);
                 is_sorted = false;
             }
         }
@@ -1534,8 +1775,11 @@ void CocktailShakerSort<T, Comparator>::sort(T* arr, std::size_t size) {
 
         is_sorted = true;
         for (int i = size - 2; i >= 0; i--) {
+            if(this->m_visualizer &&this->m_visualizer->isStopped() )
+                return;
             if (!this->comparator(arr[i], arr[i + 1])) {
-                std::swap(arr[i], arr[i + 1]);
+                //std::swap(arr[i], arr[i + 1]);
+                 this->swap(arr,i,i+1);
                 is_sorted = false;
             }
         }
@@ -1593,6 +1837,14 @@ void TimSort<T, Comparator>::run(){
     if (size <= 1){
         return;
     }
+
+    if(this->m_visualizer)
+            {
+
+              if(this->m_visualizer->isStopped())
+                 return;
+                this->m_visualizer->readVector(std::vector<T>(arr,arr+size));
+            }
     this->sort(arr, size);
 }
 
@@ -1635,6 +1887,9 @@ void TimSort<T, Comparator>::sort(T* arr, std::size_t size) {
 
     // split array on runs
     for (std::size_t i = 0; i < size; i++) {
+
+        if(this->m_visualizer &&this->m_visualizer->isStopped() )
+           return;
 
         std::size_t run_start = i;
         while (i < size - 1 && this->comparator(arr[i], arr[i + 1])) {
@@ -1688,10 +1943,21 @@ void TimSort<T, Comparator>::insertionSort(T* arr, std::size_t start, std::size_
         // choose place to insert
         int j = i;
         while (j > start && !this->comparator(arr[j - 1], temp)) {
+            if(this->m_visualizer){
+                            if(this->m_visualizer->isStopped())
+                                return;
+                        this->m_visualizer->highlight(j,j-1,this->m_visualizer->getColor(baseVisualizerObserver::Colors::YELLOW));
+                        }
             arr[j] = arr[j - 1];
-            j--;
+
+            if(this->m_visualizer)
+              this->m_visualizer->reReadVector(std::vector<T>(arr,arr+size),j,j);
+             j--;
+
         }
         arr[j] = temp;
+        if(this->m_visualizer)
+          this->m_visualizer->reReadVector(std::vector<T>(arr,arr+size),j,j);
     }
 
 
@@ -1708,7 +1974,8 @@ void TimSort<T, Comparator>::tryMerge(T* arr, std::vector<Run>& runs) {
     Run* z = &runs[runs.size() - 3];
 
     while (runs.size() >= 3 && (z->size <= y->size + x->size || y->size <= x->size)) { // if some rule isn't true //// add= in rules
-
+        if(this->m_visualizer &&this->m_visualizer->isStopped() )
+            return;
         // need to merge y with min size sibling (x or z)
         if (z->size <= y->size + x->size) {
             if (x->size < z->size) { // merge y and x
@@ -1740,6 +2007,8 @@ template <typename T, typename Comparator>
 void TimSort<T, Comparator>::fullMerge(T* arr, std::vector<Run>& runs) {
     while (runs.size() > 1) {
         for (std::size_t i = 0; i < runs.size() - 1; i++) { ///// i+=2
+            if(this->m_visualizer &&this->m_visualizer->isStopped() )
+                return;
             Run& x = runs[i + 1];
             Run& y = runs[i];
 
@@ -1752,6 +2021,13 @@ void TimSort<T, Comparator>::fullMerge(T* arr, std::vector<Run>& runs) {
 template <typename T, typename Comparator>
 void TimSort<T, Comparator>::merge(T* arr, std::size_t left_begin, std::size_t left_end, std::size_t right_begin, std::size_t right_end) {
     assert(left_end + 1 == right_begin);
+
+    if(this->m_visualizer){
+                    if(this->m_visualizer->isStopped())
+                        return;
+                this->m_visualizer->highlight(left_begin,right_end,this->m_visualizer->getColor(baseVisualizerObserver::Colors::YELLOW));
+                }
+
 
     // copy left subarray in the temporary array
     T* temp_array = new T[left_end - left_begin + 1];
@@ -1772,18 +2048,41 @@ void TimSort<T, Comparator>::merge(T* arr, std::size_t left_begin, std::size_t l
             arr[k] = arr[j];
             j++;
         }
+
+        if(this->m_visualizer)
+                   {
+
+                     if(this->m_visualizer->isStopped())
+                        return;
+                       this->m_visualizer->reReadVector(std::vector<T>(arr,arr+size),k,k);
+                   }
+
         k++;
     }
 
     while (i < left_end - left_begin + 1) { // left_begin
         arr[k] = temp_array[i];
         i++;
+        if(this->m_visualizer)
+                   {
+
+                     if(this->m_visualizer->isStopped())
+                        return;
+                       this->m_visualizer->reReadVector(std::vector<T>(arr,arr+size),k,k);
+                   }
         k++;
     }
 
     while (j <= right_end) {
         arr[k] = arr[j];
         j++;
+        if(this->m_visualizer)
+                   {
+
+                     if(this->m_visualizer->isStopped())
+                        return;
+                       this->m_visualizer->reReadVector(std::vector<T>(arr,arr+size),k,k);
+                   }
         k++;
     }
 
