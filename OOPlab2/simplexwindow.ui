@@ -21,6 +21,90 @@
   <property name="windowTitle">
    <string>Simplex method</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">QScrollBar::vertical{
+background: none;
+border-style: outset;
+border-width: 1px;
+border:none;
+width:7px;
+border-radius: 3px;
+}
+QScrollBar::horizontal
+{
+background: none;
+border-style: outset;
+border-width: 1px;
+border:none;
+height:7px;
+border-radius: 3px;
+}
+QScrollBar::handle:vertical,QScrollBar::handle:horizontal {
+background-color: #808080;
+border-style: outset;
+border-width: 1px;
+border-radius: 3px;
+width:7px;
+}
+
+QScrollBar::sub-line:vertical,QScrollBar::sub-line:horizontal {
+	border: none;
+      background: none;
+
+}
+
+
+/* BTN BOTTOM - SCROLLBAR */
+QScrollBar::add-line:vertical,QScrollBar::add-line:horizontal {
+		border: none;
+      background: none;
+}
+QScrollBar::up-arrow:vertical, QScrollBar::down-arrow:vertical,QScrollBar::left-arrow:horizontal, QScrollBar::right-arrow:horizontal {
+	background: none;
+}
+QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical,QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
+	background: none;
+}
+
+QHeaderView::section
+{
+
+    background-color: #808080;
+	color:#F5F5DC;
+    padding: 4px;
+    font:bold 14px;
+
+}
+QHeaderView::section:checked
+{
+    background-color:FFFFFF;
+	
+    
+}
+QTableView
+{
+    font:bold 14px;
+
+}
+QTableView::item
+{
+	background-color: #808080;
+	color:#F5F5DC;
+}
+QTableView::item::selected
+{
+	background-color: #464646;
+    
+}
+
+QTableView QTableCornerButton::section
+{
+    background-color: #808080;
+    
+}
+
+</string>
+  </property>
   <property name="sizeGripEnabled">
    <bool>false</bool>
   </property>
@@ -48,6 +132,9 @@
        <height>16777215</height>
       </size>
      </property>
+     <property name="styleSheet">
+      <string notr="true">background-color:#F8F8FF</string>
+     </property>
      <property name="title">
       <string/>
      </property>
@@ -66,8 +153,20 @@
            <widget class="QLabel" name="label_3">
             <property name="font">
              <font>
-              <pointsize>10</pointsize>
+              <pointsize>-1</pointsize>
+              <weight>75</weight>
+              <italic>false</italic>
+              <bold>true</bold>
              </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">background-color: #808080;
+color:#F5F5DC;
+ border-style: outset;
+    border-width: 2px;
+    border-radius: 10px;
+    font: bold 14px;
+padding: 5px</string>
             </property>
             <property name="text">
              <string>Number of variables:</string>
@@ -78,8 +177,20 @@
            <widget class="QLineEdit" name="lineEdit">
             <property name="font">
              <font>
-              <pointsize>10</pointsize>
+              <pointsize>-1</pointsize>
+              <weight>75</weight>
+              <italic>false</italic>
+              <bold>true</bold>
              </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">background-color: #FFFFFF;
+color:#F5F5DC;
+ border-style: outset;
+    border-width: 2px;
+    border-radius: 10px;
+    font: bold 14px;
+padding: 5px</string>
             </property>
             <property name="readOnly">
              <bool>true</bool>
@@ -90,8 +201,20 @@
            <widget class="QPushButton" name="vars_add">
             <property name="font">
              <font>
-              <pointsize>10</pointsize>
+              <pointsize>-1</pointsize>
+              <weight>75</weight>
+              <italic>false</italic>
+              <bold>true</bold>
              </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">background-color: #808080;
+color:#F5F5DC;
+ border-style: outset;
+    border-width: 2px;
+    border-radius: 10px;
+    font: bold 14px;
+padding: 5px</string>
             </property>
             <property name="text">
              <string>+</string>
@@ -102,8 +225,20 @@
            <widget class="QPushButton" name="vars_remove">
             <property name="font">
              <font>
-              <pointsize>10</pointsize>
+              <pointsize>-1</pointsize>
+              <weight>75</weight>
+              <italic>false</italic>
+              <bold>true</bold>
              </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">background-color: #808080;
+color:#F5F5DC;
+ border-style: outset;
+    border-width: 2px;
+    border-radius: 10px;
+    font: bold 14px;
+padding: 5px</string>
             </property>
             <property name="text">
              <string>-</string>
@@ -121,8 +256,20 @@
            <widget class="QLabel" name="label_4">
             <property name="font">
              <font>
-              <pointsize>10</pointsize>
+              <pointsize>-1</pointsize>
+              <weight>75</weight>
+              <italic>false</italic>
+              <bold>true</bold>
              </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">background-color: #808080;
+color:#F5F5DC;
+ border-style: outset;
+    border-width: 2px;
+    border-radius: 10px;
+    font: bold 14px;
+padding: 5px</string>
             </property>
             <property name="text">
              <string>Number of constraints:</string>
@@ -133,8 +280,20 @@
            <widget class="QLineEdit" name="lineEdit_2">
             <property name="font">
              <font>
-              <pointsize>10</pointsize>
+              <pointsize>-1</pointsize>
+              <weight>75</weight>
+              <italic>false</italic>
+              <bold>true</bold>
              </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">background-color: #FFFFFF;
+color:#F5F5DC;
+ border-style: outset;
+    border-width: 2px;
+    border-radius: 10px;
+    font: bold 14px;
+padding: 5px</string>
             </property>
             <property name="readOnly">
              <bool>true</bool>
@@ -145,8 +304,20 @@
            <widget class="QPushButton" name="constraints_add">
             <property name="font">
              <font>
-              <pointsize>10</pointsize>
+              <pointsize>-1</pointsize>
+              <weight>75</weight>
+              <italic>false</italic>
+              <bold>true</bold>
              </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">background-color: #808080;
+color:#F5F5DC;
+ border-style: outset;
+    border-width: 2px;
+    border-radius: 10px;
+    font: bold 14px;
+padding: 5px</string>
             </property>
             <property name="text">
              <string>+</string>
@@ -157,8 +328,20 @@
            <widget class="QPushButton" name="constraints_remove">
             <property name="font">
              <font>
-              <pointsize>10</pointsize>
+              <pointsize>-1</pointsize>
+              <weight>75</weight>
+              <italic>false</italic>
+              <bold>true</bold>
              </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">background-color: #808080;
+color:#F5F5DC;
+ border-style: outset;
+    border-width: 2px;
+    border-radius: 10px;
+    font: bold 14px;
+padding: 5px</string>
             </property>
             <property name="text">
              <string>-</string>
@@ -194,8 +377,8 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>960</width>
-           <height>337</height>
+           <width>968</width>
+           <height>347</height>
           </rect>
          </property>
          <layout class="QGridLayout" name="gridLayout_2"/>
@@ -206,8 +389,20 @@
        <widget class="QPushButton" name="pushButton">
         <property name="font">
          <font>
-          <pointsize>10</pointsize>
+          <pointsize>-1</pointsize>
+          <weight>75</weight>
+          <italic>false</italic>
+          <bold>true</bold>
          </font>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-color: #808080;
+color:#F5F5DC;
+ border-style: outset;
+    border-width: 2px;
+    border-radius: 10px;
+    font: bold 14px;
+padding: 5px</string>
         </property>
         <property name="text">
          <string>Generate random input</string>
@@ -218,8 +413,20 @@
        <widget class="QPushButton" name="btnrun">
         <property name="font">
          <font>
-          <pointsize>10</pointsize>
+          <pointsize>-1</pointsize>
+          <weight>75</weight>
+          <italic>false</italic>
+          <bold>true</bold>
          </font>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-color: #808080;
+color:#F5F5DC;
+ border-style: outset;
+    border-width: 2px;
+    border-radius: 10px;
+    font: bold 14px;
+padding: 5px</string>
         </property>
         <property name="text">
          <string>Run algorithm</string>
