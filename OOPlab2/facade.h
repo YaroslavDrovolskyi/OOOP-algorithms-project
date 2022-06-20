@@ -47,16 +47,18 @@ public:
   virtual  void setIsAscend(bool b);
   virtual   void selectCreator(int index);
   virtual  void setVisualize(bool b);
+  virtual bool isVisualizationOn()const;
   //virtual   void setAlgorithmVisualizer(baseVisualizerObserver*);
   //virtual baseVisualizerObserver* getAlgorithmVisualizer() const;
   struct visualizerInfo
   {
       visualizerInfo()=default;
-      visualizerInfo(size_t h,size_t w,QFrame*fr,QMutex* m);
+      visualizerInfo(size_t h,size_t w,QFrame*fr,QMutex* m,QThread*th);
       size_t heigth;
       size_t width;
       QFrame* frame_ptr;
       QMutex* mut;
+      QThread* thread;
   };
   virtual void setFrameInfo(visualizerInfo&&);
 
@@ -64,7 +66,7 @@ public:
 protected:
   // std::unique_ptr<baseVisualizerObserver>m_algorithmvisualizer;
    std::shared_ptr<abstrFacadeInfo>facadeInfo_ ;     //unique???
-   std::shared_ptr<algoCreator>algoCreator_;
+   std::unique_ptr<algoCreator>algoCreator_;
 
    bool hasTime;
    bool hasNumberOfComparisons;
