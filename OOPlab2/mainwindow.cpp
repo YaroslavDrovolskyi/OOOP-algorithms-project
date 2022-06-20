@@ -79,7 +79,7 @@ MainWindow::~MainWindow()
 
      size_t height = this->ui->resultTable->height();
       size_t width = this->ui->resultTable->width();
-      Facade::visualizerInfo fr_inf(height,width,ui->visualizationFrame,&this->m_mutex);
+      Facade::visualizerInfo fr_inf(height,width,ui->visualizationFrame,&this->m_mutex,qthread.get());
 
      this->facade->setFrameInfo(std::move(fr_inf));
 
@@ -120,9 +120,11 @@ void MainWindow::on_btnrun_clicked()
       try {
           this->facade->runAlgo(this->ui->algoselector->currentIndex());
           //Save memento here
+          if(!this->facade->isVisualizationOn()){
           ui->resultTable->insertRow(ui->resultTable->rowCount());
          auto inf = this->facade->getInfo().get();
           this->results_table_originator.writeInRow(inf, ui->resultTable->rowCount()-1);
+          }
 
       }  catch (const std::exception& e) {
 
@@ -376,6 +378,7 @@ void MainWindow::on_visualizebtn_clicked()
     if(!qthread )
        {
 
+        qthread = std::make_unique<QThread>(new QThread(this));
         saveInfoToFacade();
 
     facade->setVisualize(true);
@@ -399,12 +402,12 @@ void MainWindow::on_visualizebtn_clicked()
     }
 
       //qthread = new QThread(this);
-     qthread = std::make_unique<QThread>(new QThread(this));
-      this->facade->setInputLine(this->ui->inputline->text());
+
+     // this->facade->setInputLine(this->ui->inputline->text());
       facade->moveToThread(qthread.get());
       qthread->start();
-      QMetaObject::invokeMethod(facade.get(), "runAlgo", Qt::QueuedConnection,Q_ARG(int,this->ui->algoselector->currentIndex()));
 
+      QMetaObject::invokeMethod(facade.get(), "runAlgo", Qt::QueuedConnection,Q_ARG(int,this->ui->algoselector->currentIndex()));
 
     }
     else

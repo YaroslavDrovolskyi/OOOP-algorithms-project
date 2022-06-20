@@ -23,14 +23,14 @@
 class visitor
 {
 public:
-    visitor(std::shared_ptr<algoCreator> algo): algoCreator_(algo){}; //< init visitor with pointer on algoCreator
+    visitor(algoCreator* algo): algoCreator_(algo){}; //< init visitor with pointer on algoCreator
     void calculateTime();
         QString getTime();
 private:
   QString time;
   QElapsedTimer timer;
   //algorithm* algorithm_;
-std::shared_ptr<algoCreator> algoCreator_;
+algoCreator* algoCreator_;
 
 };
 

@@ -32,7 +32,7 @@ Facade::Facade(QWidget*parent):facadeInfo_(nullptr),algoCreator_(nullptr),
  void Facade::runAlgo(const int ind)      //template method
  {
      this->counter=0;
-
+try {
      this->selectCreator(ind);//creator
 
 
@@ -49,6 +49,14 @@ Facade::Facade(QWidget*parent):facadeInfo_(nullptr),algoCreator_(nullptr),
     this->saveName();
     if(this->hasNumberOfComparisons)
     this->saveNumberOfComparisons();
+     }
+     catch(const std::exception&e)
+     {
+         if(this->m_frameinfo.thread && this->m_frameinfo.thread->isRunning())
+             return;
+         else
+             throw;
+     }
 
  };
 
@@ -114,9 +122,10 @@ Facade::Facade(QWidget*parent):facadeInfo_(nullptr),algoCreator_(nullptr),
      case(0):
 
     if(this->isAscend)
-      this->algoCreator_ =std::make_shared<mergeSortCreator>( std::move(this->inputLine),this->comparatorAscend<float>);
+      this->algoCreator_ =std::make_unique<mergeSortCreator>( std::move(this->inputLine),this->comparatorAscend<float>);
+
     else
-          this->algoCreator_ =std::make_shared<mergeSortCreator>( std::move(this->inputLine),this->comparatorDescend<float>);
+          this->algoCreator_ =std::make_unique<mergeSortCreator>( std::move(this->inputLine),this->comparatorDescend<float>);
         // this->algoCreator_ =std::make_shared<mergeSortCreator>( std::move(this->inputLine),this->currentComparator<float>);
         if(this->visualize)
           {
@@ -132,9 +141,9 @@ Facade::Facade(QWidget*parent):facadeInfo_(nullptr),algoCreator_(nullptr),
          break;
      case(1):
          if(this->isAscend)
- this->algoCreator_ =std::make_shared<quickSortCreator>( std::move(this->inputLine),this->comparatorAscend<float>);
+ this->algoCreator_ =std::make_unique<quickSortCreator>( std::move(this->inputLine),this->comparatorAscend<float>);
          else
-               this->algoCreator_ =std::make_shared<quickSortCreator>( std::move(this->inputLine),this->comparatorDescend<float>);
+               this->algoCreator_ =std::make_unique<quickSortCreator>( std::move(this->inputLine),this->comparatorDescend<float>);
          if(this->visualize)
            {
 
@@ -150,9 +159,9 @@ Facade::Facade(QWidget*parent):facadeInfo_(nullptr),algoCreator_(nullptr),
          break;
      case(2):
          if(this->isAscend)
- this->algoCreator_ =std::make_shared<heapSortCreator>( std::move(this->inputLine),this->comparatorAscend<float>);
+ this->algoCreator_ =std::make_unique<heapSortCreator>( std::move(this->inputLine),this->comparatorAscend<float>);
          else
-               this->algoCreator_ =std::make_shared<heapSortCreator>( std::move(this->inputLine),this->comparatorDescend<float>);
+               this->algoCreator_ =std::make_unique<heapSortCreator>( std::move(this->inputLine),this->comparatorDescend<float>);
          if(this->visualize)
            {
 
@@ -169,9 +178,9 @@ Facade::Facade(QWidget*parent):facadeInfo_(nullptr),algoCreator_(nullptr),
          break;
      case(3):
          if(this->isAscend)
- this->algoCreator_ =std::make_shared<countingSortCreator>( std::move(this->inputLine),this->comparatorAscend<uint32_t>);
+ this->algoCreator_ =std::make_unique<countingSortCreator>( std::move(this->inputLine),this->comparatorAscend<uint32_t>);
          else
-               this->algoCreator_ =std::make_shared<countingSortCreator>( std::move(this->inputLine),this->comparatorDescend<uint32_t>);
+               this->algoCreator_ =std::make_unique<countingSortCreator>( std::move(this->inputLine),this->comparatorDescend<uint32_t>);
 
          if(this->visualize)
            {
@@ -190,9 +199,9 @@ Facade::Facade(QWidget*parent):facadeInfo_(nullptr),algoCreator_(nullptr),
          break;
      case(4):
          if(this->isAscend)
- this->algoCreator_ =std::make_shared<radixSortCreator>( std::move(this->inputLine),this->comparatorAscend<uint32_t>);
+ this->algoCreator_ =std::make_unique<radixSortCreator>( std::move(this->inputLine),this->comparatorAscend<uint32_t>);
          else
-               this->algoCreator_ =std::make_shared<radixSortCreator>( std::move(this->inputLine),this->comparatorDescend<uint32_t>);
+               this->algoCreator_ =std::make_unique<radixSortCreator>( std::move(this->inputLine),this->comparatorDescend<uint32_t>);
          if(this->visualize)
            {
 
@@ -207,9 +216,9 @@ Facade::Facade(QWidget*parent):facadeInfo_(nullptr),algoCreator_(nullptr),
          break;
      case(5):
          if(this->isAscend)
- this->algoCreator_ =std::make_shared<insertionSortCreator>( std::move(this->inputLine),this->comparatorAscend<float>);
+ this->algoCreator_ =std::make_unique<insertionSortCreator>( std::move(this->inputLine),this->comparatorAscend<float>);
          else
-               this->algoCreator_ =std::make_shared<insertionSortCreator>( std::move(this->inputLine),this->comparatorDescend<float>);
+               this->algoCreator_ =std::make_unique<insertionSortCreator>( std::move(this->inputLine),this->comparatorDescend<float>);
          if(this->visualize)
            {
 
@@ -225,9 +234,9 @@ Facade::Facade(QWidget*parent):facadeInfo_(nullptr),algoCreator_(nullptr),
          break;
      case(6):
          if(this->isAscend)
- this->algoCreator_ =std::make_shared<bucketSortCreator>( std::move(this->inputLine),this->comparatorAscend<float>);
+ this->algoCreator_ =std::make_unique<bucketSortCreator>( std::move(this->inputLine),this->comparatorAscend<float>);
          else
-               this->algoCreator_ =std::make_shared<bucketSortCreator>( std::move(this->inputLine),this->comparatorDescend<float>);
+               this->algoCreator_ =std::make_unique<bucketSortCreator>( std::move(this->inputLine),this->comparatorDescend<float>);
          if(this->visualize)
            {
 
@@ -242,16 +251,16 @@ Facade::Facade(QWidget*parent):facadeInfo_(nullptr),algoCreator_(nullptr),
            }
          break;
      case(7):
- this->algoCreator_ =std::make_shared<horspoolCreator>( std::move(this->inputLine));
+ this->algoCreator_ =std::make_unique<horspoolCreator>( std::move(this->inputLine));
          break;
      case(8):
- this->algoCreator_ =std::make_shared<boyermoorCreator>( std::move(this->inputLine));
+ this->algoCreator_ =std::make_unique<boyermoorCreator>( std::move(this->inputLine));
          break;
      case(9):
          if(this->isAscend)
- this->algoCreator_ =std::make_shared<CombSortCreator>( std::move(this->inputLine),this->comparatorAscend<float>);
+ this->algoCreator_ =std::make_unique<CombSortCreator>( std::move(this->inputLine),this->comparatorAscend<float>);
          else
-               this->algoCreator_ =std::make_shared<CombSortCreator>( std::move(this->inputLine),this->comparatorDescend<float>);
+               this->algoCreator_ =std::make_unique<CombSortCreator>( std::move(this->inputLine),this->comparatorDescend<float>);
          if(this->visualize)
            {
 
@@ -267,9 +276,9 @@ Facade::Facade(QWidget*parent):facadeInfo_(nullptr),algoCreator_(nullptr),
          break;
      case(10):
          if(this->isAscend)
- this->algoCreator_ =std::make_shared<ShellSortCreator>( std::move(this->inputLine),this->comparatorAscend<float>);
+ this->algoCreator_ =std::make_unique<ShellSortCreator>( std::move(this->inputLine),this->comparatorAscend<float>);
          else
-               this->algoCreator_ =std::make_shared<ShellSortCreator>( std::move(this->inputLine),this->comparatorDescend<float>);
+               this->algoCreator_ =std::make_unique<ShellSortCreator>( std::move(this->inputLine),this->comparatorDescend<float>);
          if(this->visualize)
            {
 
@@ -285,9 +294,9 @@ Facade::Facade(QWidget*parent):facadeInfo_(nullptr),algoCreator_(nullptr),
          break;
      case(11):
          if(this->isAscend)
- this->algoCreator_ =std::make_shared<OddEvenSortCreator>( std::move(this->inputLine),this->comparatorAscend<float>);
+ this->algoCreator_ =std::make_unique<OddEvenSortCreator>( std::move(this->inputLine),this->comparatorAscend<float>);
          else
-               this->algoCreator_ =std::make_shared<OddEvenSortCreator>( std::move(this->inputLine),this->comparatorDescend<float>);
+               this->algoCreator_ =std::make_unique<OddEvenSortCreator>( std::move(this->inputLine),this->comparatorDescend<float>);
 
          if(this->visualize)
            {
@@ -304,9 +313,9 @@ Facade::Facade(QWidget*parent):facadeInfo_(nullptr),algoCreator_(nullptr),
          break;
      case(12):
          if(this->isAscend)
- this->algoCreator_ =std::make_shared<CocktailShakerSortCreator>( std::move(this->inputLine),this->comparatorAscend<float>);
+ this->algoCreator_ =std::make_unique<CocktailShakerSortCreator>( std::move(this->inputLine),this->comparatorAscend<float>);
          else
-               this->algoCreator_ =std::make_shared<CocktailShakerSortCreator>( std::move(this->inputLine),this->comparatorDescend<float>);
+               this->algoCreator_ =std::make_unique<CocktailShakerSortCreator>( std::move(this->inputLine),this->comparatorDescend<float>);
          if(this->visualize)
            {
 
@@ -323,9 +332,9 @@ Facade::Facade(QWidget*parent):facadeInfo_(nullptr),algoCreator_(nullptr),
 
      case(13):
          if(this->isAscend)
- this->algoCreator_ =std::make_shared<TimSortCreator>( std::move(this->inputLine),this->comparatorAscend<float>);
+ this->algoCreator_ =std::make_unique<TimSortCreator>( std::move(this->inputLine),this->comparatorAscend<float>);
          else
-               this->algoCreator_ =std::make_shared<TimSortCreator>( std::move(this->inputLine),this->comparatorDescend<float>);
+               this->algoCreator_ =std::make_unique<TimSortCreator>( std::move(this->inputLine),this->comparatorDescend<float>);
          if(this->visualize)
            {
 
@@ -417,7 +426,7 @@ Facade::Facade(QWidget*parent):facadeInfo_(nullptr),algoCreator_(nullptr),
  */
  QString Facade::calculateTime()
  {
-     visitor visitor_(this->algoCreator_);
+     visitor visitor_(this->algoCreator_.get());
      visitor_.calculateTime();
     return visitor_.getTime();
 
@@ -443,12 +452,17 @@ void Facade::setIsAscend(bool b)
     this->isAscend = b;
 }
 
-Facade::visualizerInfo::visualizerInfo(size_t h,size_t w,QFrame*fr,QMutex* m):
-                                        heigth(h),width(w),frame_ptr(fr),mut(m)
+Facade::visualizerInfo::visualizerInfo(size_t h, size_t w, QFrame*fr, QMutex* m, QThread *th):
+                                        heigth(h),width(w),frame_ptr(fr),mut(m),thread(th)
 {
 }
 
 void Facade::setFrameInfo(visualizerInfo&& fr_inf)
 {
     this->m_frameinfo = fr_inf;
+}
+
+bool Facade::isVisualizationOn()const
+{
+    return this->visualize;
 }
