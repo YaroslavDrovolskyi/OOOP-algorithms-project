@@ -110,7 +110,8 @@ QTableWidget* SimplexResultVisualizer::visualizeSimplexTable(const SimplexMethod
         auto theta = simplex_step.getTheta();
 
         for (std::size_t i = 0; i < n_rows - 1; i++){
-            QString cur_theta = QString::number(beta[i]);
+            QString cur_theta = QString::number(theta[i]);
+
             table->setItem(i, n_cols - 1, new QTableWidgetItem(cur_theta));
         }
 

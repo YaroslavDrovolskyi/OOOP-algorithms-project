@@ -185,7 +185,7 @@ padding: 5px</string>
             </property>
             <property name="styleSheet">
              <string notr="true">background-color: #FFFFFF;
-color:#F5F5DC;
+color:#8c8c8c;
  border-style: outset;
     border-width: 2px;
     border-radius: 10px;
@@ -288,7 +288,7 @@ padding: 5px</string>
             </property>
             <property name="styleSheet">
              <string notr="true">background-color: #FFFFFF;
-color:#F5F5DC;
+color:#8c8c8c;
  border-style: outset;
     border-width: 2px;
     border-radius: 10px;
@@ -377,8 +377,8 @@ padding: 5px</string>
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>968</width>
-           <height>347</height>
+           <width>960</width>
+           <height>329</height>
           </rect>
          </property>
          <layout class="QGridLayout" name="gridLayout_2"/>
