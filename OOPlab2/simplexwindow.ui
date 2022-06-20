@@ -70,7 +70,7 @@ QHeaderView::section
 {
 
     background-color: #808080;
-	color:#F5F5DC;
+/*	color:#F5F5DC; */
     padding: 4px;
     font:bold 14px;
 
@@ -83,13 +83,13 @@ QHeaderView::section:checked
 }
 QTableView
 {
-    font:bold 14px;
+    font:/*bold*/ 14px;
 
 }
 QTableView::item
 {
-	background-color: #808080;
-	color:#F5F5DC;
+	background-color: #d9d9d9;
+/*	color:#F5F5DC; */
 }
 QTableView::item::selected
 {
