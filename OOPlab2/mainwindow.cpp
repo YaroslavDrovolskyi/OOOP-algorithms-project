@@ -50,6 +50,11 @@ MainWindow::MainWindow(QWidget *parent)
     ui->visualizationFrame->hide();
     ui->hidebtn->hide();
 
+    maxNumberOfSymbols = 150;
+
+    errorMessages = {{0, "Input line has more than " + QString::number(maxNumberOfSymbols) + "symbols"},
+                     {1,"Error occured while running algorithm"}};
+
 }
 
 MainWindow::~MainWindow()
@@ -77,6 +82,8 @@ MainWindow::~MainWindow()
 
 
 
+         if(ui->inputline->text().size() > this->maxNumberOfSymbols)
+             throw std::out_of_range(errorMessages[0].toStdString());
      size_t height = this->ui->resultTable->height();
       size_t width = this->ui->resultTable->width();
       Facade::visualizerInfo fr_inf(height,width,ui->visualizationFrame,&this->m_mutex,qthread.get());
@@ -85,6 +92,9 @@ MainWindow::~MainWindow()
 
       this->facade->setInputLine(this->ui->inputline->text());
 
+      if(qthread)
+        facade->setVisualize(true);
+      else
       facade->setVisualize(false);
 
      if(ui->radioDescend->isChecked())
@@ -101,6 +111,7 @@ MainWindow::~MainWindow()
           this->facade->setTime(false);
 
 
+
  }
 
 
@@ -114,10 +125,11 @@ void MainWindow::on_btnrun_clicked()
 {
 
       on_hidebtn_clicked();
-      saveInfoToFacade();
+
 
 
       try {
+          saveInfoToFacade();
           this->facade->runAlgo(this->ui->algoselector->currentIndex());
           //Save memento here
           if(!this->facade->isVisualizationOn()){
@@ -128,7 +140,7 @@ void MainWindow::on_btnrun_clicked()
 
       }  catch (const std::exception& e) {
 
-          QMessageBox::warning(this, "Error occured",e.what(), QMessageBox::Ok,QMessageBox::Ok);
+          QMessageBox::warning(this, this->errorMessages[1],e.what(), QMessageBox::Ok,QMessageBox::Ok);
 
       }
 
@@ -377,11 +389,11 @@ void MainWindow::on_visualizebtn_clicked()
 {
     if(!qthread )
        {
-
+            try{
         qthread = std::make_unique<QThread>(new QThread(this));
         saveInfoToFacade();
 
-    facade->setVisualize(true);
+   // facade->setVisualize(true);
     ui->resultTable->hide();
     ui->visualizationFrame->show();
     ui->hidebtn->show();
@@ -409,7 +421,14 @@ void MainWindow::on_visualizebtn_clicked()
 
       QMetaObject::invokeMethod(facade.get(), "runAlgo", Qt::QueuedConnection,Q_ARG(int,this->ui->algoselector->currentIndex()));
 
-    }
+    }//try
+        catch (const std::exception& e)
+        {
+            qthread.reset(nullptr);
+        QMessageBox::warning(this, this->errorMessages[1],e.what(), QMessageBox::Ok,QMessageBox::Ok);
+
+        }
+    }//if(!qthread)
     else
     {
 

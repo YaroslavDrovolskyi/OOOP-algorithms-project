@@ -87,9 +87,18 @@ private:
         "TimSort"
     };
 
+    enum errorCode
+    {
+        LongInputLine =0
+    };
+
+   // QString errorMessage(errorCode m_error);
+    size_t maxNumberOfSymbols;
+    std::map<int,QString> errorMessages;
+
+
     ResultTableOriginator results_table_originator;
     ResultTableHistory results_history;
-
     QString getRandomInputLine(std::size_t algo_index);
     std::vector<int> getRandomIntArray(std::size_t size, int min, int max);
     std::vector<double> getRandomDoubleArray(std::size_t size, int min, int max); // generate numbers in [min, max) interval
